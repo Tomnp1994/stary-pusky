@@ -1,0 +1,660 @@
+<!DOCTYPE html>
+<html lang="cs">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Kolo štěstí — vánoční besídka</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,500;9..144,600&family=Work+Sans:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --pine:#1F3A2E;
+    --pine-dark:#0F1A14;
+    --burgundy:#6B1E2B;
+    --gold:#C89B3C;
+    --gold-bright:#E7C878;
+    --rust:#A2522E;
+    --plum:#3B2142;
+    --holly-red:#8C2A2A;
+    --cream:#F6EFDD;
+    --cream-dim:#E4D9BC;
+    --ink:#20201B;
+  }
+  *{box-sizing:border-box;}
+  html,body{margin:0;padding:0;}
+  body{
+    background:
+      radial-gradient(circle at 15% 8%, rgba(200,155,60,0.10) 0%, transparent 32%),
+      radial-gradient(circle at 85% 92%, rgba(140,42,42,0.14) 0%, transparent 38%),
+      radial-gradient(circle at 20% 10%, #1c2e24 0%, var(--pine-dark) 55%, #0a120d 100%);
+    color:var(--cream);
+    font-family:'Work Sans', sans-serif;
+    min-height:100vh;
+    padding:48px 20px 64px;
+    position:relative;
+    overflow-x:hidden;
+  }
+
+  .snow{
+    position:fixed;
+    inset:0;
+    pointer-events:none;
+    z-index:0;
+    overflow:hidden;
+  }
+  .flake{
+    position:absolute;
+    top:-5%;
+    border-radius:50%;
+    background:rgba(246,239,221,0.55);
+    animation:fall linear infinite;
+  }
+  @keyframes fall{
+    to{ transform:translateY(115vh); }
+  }
+  @media (prefers-reduced-motion: reduce){
+    .flake{ animation:none; display:none; }
+  }
+
+  .wrap{
+    max-width:980px;
+    margin:0 auto;
+    position:relative;
+    z-index:1;
+  }
+
+  .garland{
+    display:block;
+    width:100%;
+    height:auto;
+    margin:0 auto 8px;
+    opacity:0.9;
+  }
+  .garland.bottom{ margin:52px auto 0; transform:scaleY(-1); }
+
+  header{
+    text-align:center;
+    margin-bottom:8px;
+  }
+  .eyebrow{
+    font-size:14px;
+    letter-spacing:0.04em;
+    color:var(--gold);
+    margin-bottom:6px;
+  }
+  h1{
+    font-family:'Fraunces', serif;
+    font-weight:600;
+    font-size:clamp(36px, 6vw, 58px);
+    margin:0 0 10px;
+    color:var(--cream);
+    text-shadow:0 0 34px rgba(200,155,60,0.35);
+  }
+  .sub{
+    color:var(--cream-dim);
+    font-size:16px;
+    max-width:480px;
+    margin:0 auto;
+    line-height:1.5;
+  }
+
+  .stage{
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+    gap:26px;
+  }
+
+  .wheel-holder{
+    position:relative;
+    width:min(420px, 84vw);
+    margin-top:34px;
+  }
+  .star-topper{
+    position:absolute;
+    top:-38px;
+    left:50%;
+    transform:translateX(-50%);
+    width:34px;
+    height:34px;
+    z-index:6;
+    filter:drop-shadow(0 2px 6px rgba(0,0,0,0.45));
+  }
+  .pointer{
+    position:absolute;
+    top:2px;
+    left:50%;
+    transform:translateX(-50%);
+    width:0; height:0;
+    border-left:15px solid transparent;
+    border-right:15px solid transparent;
+    border-top:26px solid var(--holly-red);
+    filter:drop-shadow(0 2px 3px rgba(0,0,0,0.4));
+    z-index:5;
+  }
+  .wheel-ring{
+    position:relative;
+    border-radius:50%;
+    padding:14px;
+    background:linear-gradient(155deg, var(--gold-bright), #8a6a22 55%, var(--gold));
+    box-shadow:0 18px 40px rgba(0,0,0,0.5), 0 0 0 6px rgba(140,42,42,0.35);
+  }
+  canvas{
+    display:block;
+    width:100%;
+    height:auto;
+    border-radius:50%;
+    background:var(--cream);
+    transition: transform 4.2s cubic-bezier(0.15, 0.62, 0.1, 1);
+  }
+  .hub{
+    position:absolute;
+    top:50%; left:50%;
+    width:16%;
+    aspect-ratio:1;
+    transform:translate(-50%,-50%);
+    background:var(--cream);
+    border-radius:50%;
+    border:3px solid var(--gold);
+    z-index:4;
+  }
+
+  .controls{
+    display:flex;
+    gap:10px;
+    flex-wrap:wrap;
+    justify-content:center;
+    width:100%;
+    max-width:420px;
+  }
+  input[type=text]{
+    flex:1 1 200px;
+    min-width:0;
+    padding:13px 16px;
+    border-radius:8px;
+    border:1px solid rgba(246,239,221,0.25);
+    background:rgba(246,239,221,0.06);
+    color:var(--cream);
+    font-family:'Work Sans', sans-serif;
+    font-size:16px;
+  }
+  input[type=text]::placeholder{ color:rgba(246,239,221,0.45); }
+  input[type=text]:focus{
+    outline:none;
+    border-color:var(--gold);
+  }
+  button{
+    font-family:'Work Sans', sans-serif;
+    font-weight:600;
+    font-size:15px;
+    padding:13px 22px;
+    border-radius:8px;
+    border:none;
+    cursor:pointer;
+    transition: transform 0.15s ease, filter 0.15s ease;
+  }
+  #spinBtn{
+    background:var(--gold);
+    color:#231a06;
+  }
+  #spinBtn:hover:not(:disabled){ filter:brightness(1.08); }
+  #spinBtn:active:not(:disabled){ transform:scale(0.97); }
+  #spinBtn:disabled{
+    background:rgba(246,239,221,0.15);
+    color:rgba(246,239,221,0.4);
+    cursor:not-allowed;
+  }
+  .hint{
+    min-height:18px;
+    font-size:13px;
+    color:var(--rust);
+    text-align:center;
+  }
+  .hint.ok{ color:var(--gold); }
+
+  .panels{
+    margin-top:52px;
+    display:grid;
+    grid-template-columns:1fr 1fr;
+    gap:28px;
+  }
+  @media (max-width:720px){
+    .panels{ grid-template-columns:1fr; }
+  }
+  .panel h2{
+    font-family:'Fraunces', serif;
+    font-weight:500;
+    font-size:20px;
+    margin:0 0 10px;
+    color:var(--gold);
+  }
+  .panel h2::after{
+    content:"";
+    display:block;
+    width:46px;
+    height:3px;
+    margin-top:8px;
+    background:repeating-linear-gradient(-45deg, var(--holly-red) 0 5px, var(--gold) 5px 10px);
+    border-radius:2px;
+  }
+  .panel{
+    background:rgba(246,239,221,0.03);
+    border:1px solid rgba(246,239,221,0.08);
+    border-radius:14px;
+    padding:22px 24px;
+  }
+  .task-row{
+    display:flex;
+    align-items:flex-start;
+    gap:12px;
+    padding:10px 0;
+    border-bottom:1px solid rgba(246,239,221,0.1);
+    font-size:14px;
+    line-height:1.45;
+  }
+  .task-row:last-child{ border-bottom:none; }
+  .swatch{
+    flex:0 0 26px;
+    width:26px; height:26px;
+    border-radius:50%;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    font-family:'Fraunces', serif;
+    font-size:13px;
+    color:var(--cream);
+    margin-top:1px;
+  }
+  .task-row.done{ opacity:0.45; }
+  .task-row .full{ color:var(--cream-dim); }
+
+  .results{
+    list-style:none;
+    margin:0; padding:0;
+  }
+  .results li{
+    display:flex;
+    justify-content:space-between;
+    gap:10px;
+    padding:11px 0;
+    border-bottom:1px solid rgba(246,239,221,0.1);
+    font-size:14px;
+  }
+  .results li:last-child{ border-bottom:none; }
+  .results .name{ font-weight:600; color:var(--cream); white-space:nowrap; }
+  .results .task{ color:var(--cream-dim); text-align:right; }
+  .empty-note{
+    color:rgba(246,239,221,0.4);
+    font-size:14px;
+    font-style:italic;
+  }
+
+  .done-banner{
+    margin-top:36px;
+    text-align:center;
+    font-family:'Fraunces', serif;
+    font-size:20px;
+    color:var(--gold-bright);
+    display:none;
+    padding:16px 20px;
+    border:1px solid rgba(200,155,60,0.35);
+    border-radius:12px;
+    background:rgba(200,155,60,0.06);
+  }
+</style>
+</head>
+<body>
+
+<div class="snow" id="snow"></div>
+
+<div class="wrap">
+
+  <svg class="garland" viewBox="0 0 980 42" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg">
+    <path d="M0 8 Q 122 34 245 8 T 490 8 T 735 8 T 980 8" fill="none" stroke="#2E4B3B" stroke-width="7" stroke-linecap="round"/>
+    <g fill="#8C2A2A">
+      <circle cx="60" cy="16" r="5"/><circle cx="180" cy="24" r="5"/><circle cx="300" cy="10" r="5"/>
+      <circle cx="420" cy="20" r="5"/><circle cx="540" cy="12" r="5"/><circle cx="660" cy="22" r="5"/>
+      <circle cx="780" cy="10" r="5"/><circle cx="900" cy="18" r="5"/>
+    </g>
+    <g fill="#C89B3C">
+      <circle cx="120" cy="26" r="4"/><circle cx="240" cy="14" r="4"/><circle cx="360" cy="22" r="4"/>
+      <circle cx="480" cy="10" r="4"/><circle cx="600" cy="24" r="4"/><circle cx="720" cy="12" r="4"/>
+      <circle cx="840" cy="22" r="4"/>
+    </g>
+  </svg>
+
+  <header>
+    <div class="eyebrow">Vánoční besídka</div>
+    <h1>Kolo štěstí</h1>
+    <p class="sub">Napiš své jméno a zatoč. Kolo ti přidělí jeden z deseti úkolů — každý padne jen jednou.</p>
+  </header>
+
+  <div class="stage">
+    <div class="wheel-holder">
+      <svg class="star-topper" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+        <path d="M12 0 L14.6 8.2 L23.3 8.2 L16.3 13.3 L18.9 21.5 L12 16.4 L5.1 21.5 L7.7 13.3 L0.7 8.2 L9.4 8.2 Z" fill="#E7C878"/>
+      </svg>
+      <div class="pointer"></div>
+      <div class="wheel-ring">
+        <canvas id="wheel" width="600" height="600"></canvas>
+        <div class="hub"></div>
+      </div>
+    </div>
+
+    <div class="controls">
+      <input type="text" id="nameInput" placeholder="Tvoje jméno" maxlength="30">
+      <button id="spinBtn">Točit kolem</button>
+    </div>
+    <div class="hint" id="hint"></div>
+  </div>
+
+  <div class="done-banner" id="doneBanner">Losování je u konce. Ať se vaří, peče a servíruje!</div>
+
+  <div class="panels">
+    <div class="panel">
+      <h2>Úkoly na kole</h2>
+      <div id="taskList"></div>
+    </div>
+    <div class="panel">
+      <h2>Kdo si co vytočil</h2>
+      <ul class="results" id="resultsList">
+        <li class="empty-note">Zatím nikdo netočil.</li>
+      </ul>
+    </div>
+  </div>
+
+  <svg class="garland bottom" viewBox="0 0 980 42" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg">
+    <path d="M0 8 Q 122 34 245 8 T 490 8 T 735 8 T 980 8" fill="none" stroke="#2E4B3B" stroke-width="7" stroke-linecap="round"/>
+    <g fill="#8C2A2A">
+      <circle cx="60" cy="16" r="5"/><circle cx="180" cy="24" r="5"/><circle cx="300" cy="10" r="5"/>
+      <circle cx="420" cy="20" r="5"/><circle cx="540" cy="12" r="5"/><circle cx="660" cy="22" r="5"/>
+      <circle cx="780" cy="10" r="5"/><circle cx="900" cy="18" r="5"/>
+    </g>
+    <g fill="#C89B3C">
+      <circle cx="120" cy="26" r="4"/><circle cx="240" cy="14" r="4"/><circle cx="360" cy="22" r="4"/>
+      <circle cx="480" cy="10" r="4"/><circle cx="600" cy="24" r="4"/><circle cx="720" cy="12" r="4"/>
+      <circle cx="840" cy="22" r="4"/>
+    </g>
+  </svg>
+
+</div>
+
+<script>
+const tasks = [
+  { short:"Řízky a Coleslaw", full:"Slavnostní příprava vánočních řízků a zajištění servisu Gottštejnovic Coleslawu ve vhodnou chvíli" },
+  { short:"Bramborový salát", full:"Mistrovská příprava vánočního bramborového salátu a kompletní štědrovečerní servis a prostírání" },
+  { short:"Polévka", full:"Tradiční příprava vánoční polévky a pomocníček služebníček pro štědrovečerní servis a prostírání" },
+  { short:"Tataráček a topinky", full:"Gurmánské občerstvení vyšší třídy – domácí tataráček, křupavé topinky a další drobný pokrm pro náročné hosty" },
+  { short:"Studený raut", full:"Komplexní zajištění studeného rautu – kanapky, brambůrky a drobné zobání pro celou besídku" },
+  { short:"Sladká snídaně", full:"Sobotní slavnostní sladká snídaně pro důstojný start vánočního dne" },
+  { short:"Anglická snídaně", full:"Nedělní tradiční anglická snídaně – kompletní servis pro nedělní ráno" },
+  { short:"Svařák a sud", full:"Zimní nápojové hospodářství – příprava svařáku, kalimóča a slavnostní naražení sudu na Šebíčkovu pípu" },
+  { short:"Koňak a štrúdl", full:"Domácí vánoční delikatesy – výroba vaječného koňaku a poctivého domácího štrúdlu, jedna štangle musí být bezrozinková" },
+  { short:"Tiramisu a hnízda", full:"Mistrovský cukrářský dvojboj – delikátní domácí tiramisu a tradiční domácí vosí hnízda" }
+];
+
+const palette = ["#1F3A2E","#6B1E2B","#C89B3C","#A2522E","#3B2142"];
+
+const canvas = document.getElementById('wheel');
+const ctx = canvas.getContext('2d');
+const nameInput = document.getElementById('nameInput');
+const spinBtn = document.getElementById('spinBtn');
+const hint = document.getElementById('hint');
+const taskListEl = document.getElementById('taskList');
+const resultsListEl = document.getElementById('resultsList');
+const doneBanner = document.getElementById('doneBanner');
+
+const N = tasks.length;
+const segAngle = (2*Math.PI)/N;
+const cx = 300, cy = 300, radius = 290;
+
+// === SUPABASE NASTAVENÍ ===
+// Po vytvoření Supabase projektu sem vlož Project URL a anon public key.
+// Najdeš je v Supabase: Project Settings -> API.
+const SUPABASE_URL = "https://yojtzodvbuhzcfdzvejp.supabase.co";
+const SUPABASE_ANON_KEY = "sb_publishable_QC8b2a6ei9ZNkT3b5HtmNQ_mPd59qOl";
+
+let claimed = new Set();
+let results = [];
+let totalRotation = 0;
+let spinning = false;
+let loading = true;
+
+async function loadState(){
+  if(SUPABASE_URL.startsWith("VLOZ_") || SUPABASE_ANON_KEY.startsWith("VLOZ_")){
+    loading = false;
+    setHint("Nejdřív nastav Supabase URL a anon key v kódu.", false);
+    return;
+  }
+
+  try{
+    const res = await fetch(
+      `${SUPABASE_URL}/rest/v1/roulette_results?select=id,name,short,task_id,created_at&order=id.asc`,
+      {
+        headers:{
+          "apikey": SUPABASE_ANON_KEY,
+          "Authorization": `Bearer ${SUPABASE_ANON_KEY}`
+        }
+      }
+    );
+    if(!res.ok) throw new Error(await res.text());
+
+    const rows = await res.json();
+    results = rows.map(r => ({
+      name:r.name,
+      short:r.short,
+      taskId:r.task_id
+    }));
+    claimed = new Set(rows.map(r => Number(r.task_id)));
+    renderResults();
+    renderTaskList();
+
+    if(claimed.size >= N){
+      doneBanner.style.display = "block";
+      spinBtn.disabled = true;
+    }
+  }catch(err){
+    console.error(err);
+    setHint("Nepodařilo se načíst výsledky ze serveru.", false);
+  }finally{
+    loading = false;
+  }
+}
+
+async function saveResult(name, chosen){
+  const res = await fetch(`${SUPABASE_URL}/rest/v1/roulette_results`, {
+    method:"POST",
+    headers:{
+      "Content-Type":"application/json",
+      "apikey":SUPABASE_ANON_KEY,
+      "Authorization":`Bearer ${SUPABASE_ANON_KEY}`,
+      "Prefer":"return=minimal"
+    },
+    body:JSON.stringify({
+      name,
+      short:tasks[chosen].short,
+      task_id:chosen
+    })
+  });
+
+  if(!res.ok) throw new Error(await res.text());
+}
+
+async function refreshState(){
+  if(SUPABASE_URL.startsWith("VLOZ_") || SUPABASE_ANON_KEY.startsWith("VLOZ_")) return;
+
+  const res = await fetch(
+    `${SUPABASE_URL}/rest/v1/roulette_results?select=id,name,short,task_id,created_at&order=id.asc`,
+    {
+      headers:{
+        "apikey":SUPABASE_ANON_KEY,
+        "Authorization":`Bearer ${SUPABASE_ANON_KEY}`
+      }
+    }
+  );
+  if(!res.ok) return;
+
+  const rows = await res.json();
+  results = rows.map(r => ({name:r.name, short:r.short, taskId:r.task_id}));
+  claimed = new Set(rows.map(r => Number(r.task_id)));
+  renderResults();
+  renderTaskList();
+}
+
+function drawWheel(){
+  ctx.clearRect(0,0,600,600);
+  for(let i=0;i<N;i++){
+    const start = -Math.PI/2 + i*segAngle;
+    const end = start + segAngle;
+    const isClaimed = claimed.has(i);
+
+    ctx.beginPath();
+    ctx.moveTo(cx,cy);
+    ctx.arc(cx,cy,radius,start,end);
+    ctx.closePath();
+    ctx.fillStyle = palette[i % palette.length];
+    ctx.globalAlpha = isClaimed ? 0.28 : 1;
+    ctx.fill();
+    ctx.globalAlpha = 1;
+
+    ctx.strokeStyle = "#F6EFDD";
+    ctx.lineWidth = 3;
+    ctx.stroke();
+
+    // number label
+    const mid = start + segAngle/2;
+    ctx.save();
+    ctx.translate(cx,cy);
+    ctx.rotate(mid);
+    ctx.textAlign = "right";
+    ctx.textBaseline = "middle";
+    ctx.fillStyle = isClaimed ? "rgba(246,239,221,0.5)" : "#F6EFDD";
+    ctx.font = "600 30px Fraunces, serif";
+    ctx.fillText(String(i+1), radius - 26, 0);
+    ctx.restore();
+  }
+}
+
+function renderTaskList(){
+  taskListEl.innerHTML = "";
+  tasks.forEach((t,i)=>{
+    const row = document.createElement('div');
+    row.className = "task-row" + (claimed.has(i) ? " done" : "");
+    row.innerHTML = `
+      <div class="swatch" style="background:${palette[i%palette.length]}">${i+1}</div>
+      <div><strong>${t.short}</strong><br><span class="full">${t.full}</span></div>
+    `;
+    taskListEl.appendChild(row);
+  });
+}
+
+function renderResults(){
+  if(results.length === 0){
+    resultsListEl.innerHTML = '<li class="empty-note">Zatím nikdo netočil.</li>';
+    return;
+  }
+  resultsListEl.innerHTML = "";
+  results.forEach(r=>{
+    const li = document.createElement('li');
+    li.innerHTML = `<span class="name">${r.name}</span><span class="task">${r.short}</span>`;
+    resultsListEl.appendChild(li);
+  });
+}
+
+function setHint(msg, ok){
+  hint.textContent = msg || "";
+  hint.classList.toggle('ok', !!ok);
+}
+
+async function spin(){
+  if(spinning || loading) return;
+  const name = nameInput.value.trim();
+  if(!name){
+    setHint("Napiš prosím jméno.", false);
+    return;
+  }
+
+  // Získáme nejnovější stav, aby se dva lidé co nejméně často trefili na stejný úkol.
+  await refreshState();
+
+  if(claimed.size >= N){
+    setHint("Všechny úkoly už jsou rozdané.", false);
+    return;
+  }
+
+  setHint("Losuji…", false);
+  const available = tasks.map((t,i)=>i).filter(i=>!claimed.has(i));
+  const chosen = available[Math.floor(Math.random()*available.length)];
+
+  // Zkusíme záznam uložit hned. Databázový UNIQUE constraint na task_id
+  // zabrání tomu, aby dva lidé dostali stejný úkol.
+  try{
+    await saveResult(name, chosen);
+  }catch(err){
+    console.error(err);
+    await refreshState();
+    setHint("Tento úkol mezitím získal někdo jiný. Zkus to prosím znovu.", false);
+    return;
+  }
+
+  claimed.add(chosen);
+  results.push({name, short:tasks[chosen].short, taskId:chosen});
+  renderResults();
+  renderTaskList();
+
+  const target = ((360 - ((chosen*36) + 18)) % 360 + 360) % 360;
+  const currentMod = ((totalRotation % 360) + 360) % 360;
+  const delta = ((target - currentMod) + 360) % 360;
+  const extraSpins = 5 + Math.floor(Math.random()*2);
+  totalRotation += extraSpins*360 + delta;
+
+  spinning = true;
+  spinBtn.disabled = true;
+  canvas.style.transform = `rotate(${totalRotation}deg)`;
+
+  setTimeout(()=>{
+    nameInput.value = "";
+    spinning = false;
+    spinBtn.disabled = claimed.size >= N;
+
+    if(claimed.size >= N){
+      doneBanner.style.display = "block";
+      setHint("", false);
+    }else{
+      setHint(`${name}, tvůj úkol: ${tasks[chosen].short}`, true);
+    }
+  }, 4300);
+}
+
+spinBtn.addEventListener('click', spin);
+nameInput.addEventListener('keydown', e=>{ if(e.key === 'Enter') spin(); });
+
+function makeSnow(){
+  const layer = document.getElementById('snow');
+  const count = window.innerWidth < 600 ? 14 : 24;
+  for(let i=0;i<count;i++){
+    const f = document.createElement('div');
+    f.className = 'flake';
+    const size = 2 + Math.random()*4;
+    f.style.width = size + 'px';
+    f.style.height = size + 'px';
+    f.style.left = Math.random()*100 + 'vw';
+    f.style.opacity = 0.25 + Math.random()*0.45;
+    const duration = 10 + Math.random()*14;
+    f.style.animationDuration = duration + 's';
+    f.style.animationDelay = (-Math.random()*duration) + 's';
+    layer.appendChild(f);
+  }
+}
+makeSnow();
+
+drawWheel();
+renderTaskList();
+renderResults();
+loadState();
+
+// Průběžně obnovuj stav, aby se změny ostatních účastníků objevily i bez refreshu.
+setInterval(refreshState, 5000);
+</script>
+</body>
+</html>
