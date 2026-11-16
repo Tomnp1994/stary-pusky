@@ -117,6 +117,13 @@ main{position:relative;z-index:1;max-width:900px;margin:0 auto;padding:6px 16px 
 }
 .plate-arena .ico{animation:spin 3s linear infinite;}
 @keyframes spin{to{transform:rotate(360deg)}}
+.plate-wheel{
+  background:linear-gradient(145deg,#c89b3c,#7a5518);
+  box-shadow:0 8px 0 #4a3310,0 0 30px rgba(231,200,120,.35);
+  min-height:170px;
+}
+.plate-wheel .ico{animation:wobble 3.2s ease-in-out infinite;}
+@media(min-width:700px){.plate-wheel{grid-column:1 / -1;}}
 .plate .tie{position:absolute;top:10px;right:12px;font-size:26px;}
 
 .candles{display:flex;justify-content:center;gap:34px;margin-top:26px;font-size:34px;}
@@ -241,6 +248,12 @@ details.menu li:before{content:"✦ ";color:var(--gold);}
           <span class="t">Beyblade aréna</span>
           <span class="d">Turnaj, pavouk a sázky o panáky</span>
         </a>
+        <a class="plate plate-wheel" href="kolo.html">
+          <span class="tie">🎀</span>
+          <span class="ico">🎡</span>
+          <span class="t">Kolo štěstí</span>
+          <span class="d">Zatoč a zjisti, co budeš vařit</span>
+        </a>
       </div>
     </div>
 
@@ -282,10 +295,6 @@ details.menu li:before{content:"✦ ";color:var(--gold);}
       </div>
     </div>
 
-    <details class="menu">
-      <summary>📜 Jídelní lístek trestů</summary>
-      <ul id="prizeList"></ul>
-    </details>
   </section>
 
 </main>
@@ -348,8 +357,6 @@ const PRIZES=[
   {e:'🙌',t:'Frťan bez použití rukou'},
   {e:'🎀',t:'Frťan s mašlí — připni ji komukoli'}
 ];
-document.getElementById('prizeList').innerHTML=PRIZES.map(p=>`<li>${p.t}</li>`).join('');
-
 const COMMENTS=[
   [0,'Škrábej. Nikdo tě nesoudí. (Všichni tě soudí.)'],
   [0.04,'Jo, takhle. Jemně, ale odhodlaně.'],
