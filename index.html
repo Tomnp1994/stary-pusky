@@ -3,1254 +3,489 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>STARÝ PUŠKY — Beyblade Aréna</title>
+<title>STARÝ PUŠKY — Vánoční besídka</title>
 <style>
-@import url('https://fonts.googleapis.com/css2?family=Bungee&family=Rubik:wght@400;500;600;700;800&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Bungee&family=Caveat:wght@500;700&family=Rubik:wght@400;500;700;800&display=swap');
 
 :root{
-  --bg: #0a0e2a;
-  --bg2: #0f1638;
-  --panel: #131c47;
-  --panel2: #182154;
-  --line: #2a3570;
-  --orange: #ff6b35;
-  --red: #e5384d;
-  --ice: #4fd9ff;
-  --gold: #ffc145;
-  --green: #2fd67a;
-  --text: #f2f4ff;
-  --text-dim: #97a1d9;
+  --wood:#2a170d; --wood2:#4a2a15;
+  --board:#1d2624; --board2:#141b1a;
+  --chalk:#f4f1e6; --chalk-dim:#b9b6a8;
+  --gold:#ffc861; --amber:#ffa53d;
+  --red:#a8232f; --red2:#d23a46;
+  --pink:#f4a6b8; --mint:#a8d8c0; --sand:#e6cfa8;
 }
 *{box-sizing:border-box;}
 html,body{margin:0;padding:0;}
 body{
-  background:
-    radial-gradient(ellipse at 20% -10%, #1c2a6b 0%, transparent 55%),
-    radial-gradient(ellipse at 100% 0%, #3a1652 0%, transparent 45%),
-    var(--bg);
-  color:var(--text);
-  font-family:'Rubik',sans-serif;
   min-height:100vh;
+  font-family:'Rubik',sans-serif;
+  color:var(--chalk);
+  background:
+    radial-gradient(ellipse 60% 45% at 50% 0%, rgba(255,170,70,.28), transparent 70%),
+    radial-gradient(ellipse 40% 40% at 5% 60%, rgba(120,60,20,.35), transparent 70%),
+    radial-gradient(ellipse 40% 40% at 95% 55%, rgba(168,35,47,.22), transparent 70%),
+    linear-gradient(180deg,#140c08 0%,#1b0f09 60%,#2a170d 100%);
   overflow-x:hidden;
 }
-h1,h2,h3,.display{font-family:'Bungee',cursive;}
 
-/* ---------- snow ---------- */
-.snow-wrap{position:relative;overflow:hidden;}
-.flake{
-  position:absolute; top:-10%; color:var(--ice); opacity:.85;
-  animation:fall linear infinite;
-  filter:drop-shadow(0 0 4px rgba(79,217,255,.6));
+/* ---------- ambient: bokeh + lights ---------- */
+.bokeh{position:fixed;inset:0;pointer-events:none;z-index:0;overflow:hidden;}
+.bokeh i{
+  position:absolute;border-radius:50%;
+  background:radial-gradient(circle,rgba(255,206,120,.55),rgba(255,170,70,.12) 60%,transparent 70%);
+  filter:blur(3px);opacity:.5;
+  animation:twinkle ease-in-out infinite;
 }
-@keyframes fall{
-  to{ transform:translateY(420px) rotate(360deg); }
-}
+@keyframes twinkle{0%,100%{opacity:.15;transform:scale(.85)}50%{opacity:.7;transform:scale(1.1)}}
 
-/* ---------- header ---------- */
-.hero{
-  position:relative;
-  padding:38px 20px 30px;
-  text-align:center;
-  border-bottom:4px solid var(--orange);
-  background:
-    conic-gradient(from 90deg at 50% 120%, var(--panel2), var(--bg2) 40%, var(--panel2) 80%, var(--bg2));
+.lights{position:relative;z-index:2;display:flex;justify-content:space-between;padding:0 8px;height:46px;}
+.lights:before{
+  content:"";position:absolute;left:-2%;right:-2%;top:-14px;height:34px;
+  border-bottom:2px solid #3a2a1c;border-radius:0 0 50% 50% / 0 0 100% 100%;
 }
-.top-spin{
-  width:120px;height:120px;margin:0 auto 10px;
-  border-radius:50%;
-  background:
-    conic-gradient(var(--orange) 0 25%, var(--red) 0 50%, var(--gold) 0 75%, var(--ice) 0 100%);
-  box-shadow:0 0 0 6px var(--bg2), 0 0 40px rgba(255,107,53,.55), inset 0 0 25px rgba(0,0,0,.4);
-  animation: spin 2.2s linear infinite;
-  position:relative;
+.lights span{
+  position:relative;width:12px;height:18px;border-radius:50% 50% 50% 50%/40% 40% 60% 60%;
+  margin-top:10px;animation:bulb 2.4s ease-in-out infinite;
+  box-shadow:0 0 14px 4px var(--c);background:var(--c);
 }
-.top-spin::after{
-  content:"";position:absolute;inset:38%;
-  background:var(--bg2);border-radius:50%;
-  box-shadow:0 0 12px rgba(0,0,0,.6);
-}
-@keyframes spin{ to{ transform:rotate(360deg); } }
+.lights span:nth-child(odd){margin-top:18px;}
+@keyframes bulb{0%,100%{opacity:1}50%{opacity:.35}}
+
+main{position:relative;z-index:1;max-width:900px;margin:0 auto;padding:6px 16px 40px;}
+[hidden]{display:none !important;}
+
+/* ---------- hub ---------- */
+.hero{text-align:center;padding:10px 0 20px;}
+.kicker{font-family:'Caveat',cursive;font-size:clamp(26px,5vw,36px);color:var(--pink);font-weight:700;letter-spacing:1px;}
 .hero h1{
-  font-size:clamp(28px,6vw,54px);
-  margin:6px 0 4px;
+  font-family:'Bungee',cursive;margin:0;line-height:1.05;
+  font-size:clamp(40px,10vw,84px);
   color:var(--gold);
-  text-shadow: 3px 3px 0 var(--red), -2px -2px 0 var(--ice);
-  letter-spacing:1px;
-  line-height:1.15;
+  text-shadow:3px 3px 0 var(--red),0 0 28px rgba(255,170,70,.55);
+  transform:rotate(-2deg);
 }
-.hero p{color:var(--text-dim); font-size:15px; margin:0; max-width:520px; margin:0 auto;}
+.hero p{font-family:'Caveat',cursive;font-size:clamp(20px,4vw,26px);color:var(--sand);margin:12px 0 0;}
 
-/* ---------- nav ---------- */
-nav.tabs{
-  display:flex; flex-wrap:wrap; gap:8px; justify-content:center;
-  padding:16px 12px; background:var(--bg2); border-bottom:2px solid var(--line);
-  position:sticky; top:0; z-index:20;
+.board{
+  position:relative;margin-top:10px;padding:26px 18px 30px;border-radius:14px;
+  background:
+    radial-gradient(ellipse at 30% 20%, rgba(255,255,255,.06), transparent 60%),
+    repeating-linear-gradient(100deg,rgba(255,255,255,.02) 0 3px,transparent 3px 11px),
+    linear-gradient(145deg,var(--board),var(--board2));
+  border:10px solid transparent;
+  border-image:linear-gradient(135deg,#7a4a22,#c98c3e,#7a4a22,#b5782f) 1;
+  box-shadow:0 0 0 2px rgba(255,200,100,.25),0 0 50px rgba(255,170,70,.3),0 22px 40px rgba(0,0,0,.5);
 }
-nav.tabs button{
-  font-family:'Bungee',cursive; font-size:12px; letter-spacing:.5px;
-  color:var(--text); background:var(--panel);
-  border:2px solid var(--line); border-radius:999px;
-  padding:10px 16px; cursor:pointer;
-  transition:transform .15s, border-color .15s, background .15s;
+.board-title{
+  font-family:'Caveat',cursive;font-weight:700;text-align:center;
+  font-size:clamp(30px,6vw,44px);color:var(--chalk);
+  border-bottom:2px dashed rgba(244,241,230,.35);padding-bottom:6px;margin-bottom:22px;
 }
-nav.tabs button:hover{ transform:translateY(-2px); border-color:var(--ice); }
-nav.tabs button.active{
-  background:linear-gradient(135deg,var(--orange),var(--red));
-  border-color:var(--gold); color:#fff;
-  box-shadow:0 4px 14px rgba(229,56,77,.4);
+.board-title small{display:block;font-size:.5em;color:var(--chalk-dim);font-weight:500;}
+
+.menu-grid{display:grid;grid-template-columns:1fr;gap:18px;}
+@media(min-width:700px){.menu-grid{grid-template-columns:1fr 1fr;}}
+
+.plate{
+  position:relative;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:6px;
+  min-height:210px;padding:22px 16px;border-radius:16px;text-decoration:none;color:#fff;cursor:pointer;
+  border:3px solid rgba(255,255,255,.85);
+  font-family:inherit;text-align:center;
+  transition:transform .18s, box-shadow .18s;
+  overflow:hidden;
+}
+.plate:hover{transform:translateY(-6px) rotate(-.8deg);}
+.plate:active{transform:translateY(0) scale(.98);}
+.plate .ico{font-size:64px;line-height:1;filter:drop-shadow(0 4px 6px rgba(0,0,0,.4));}
+.plate .t{font-family:'Bungee',cursive;font-size:clamp(24px,5vw,32px);line-height:1.1;text-shadow:2px 2px 0 rgba(0,0,0,.35);}
+.plate .d{font-family:'Caveat',cursive;font-size:22px;opacity:.95;}
+.plate:after{ /* bow-tie ribbon corner */
+  content:"";position:absolute;inset:0;pointer-events:none;
+  background:linear-gradient(120deg,rgba(255,255,255,.18),transparent 35%);
+}
+.plate-penalty{
+  background:linear-gradient(145deg,#c22a38,#7d1620);
+  box-shadow:0 8px 0 #4d0c14,0 0 30px rgba(210,58,70,.35);
+}
+.plate-penalty .ico{animation:wobble 2.6s ease-in-out infinite;}
+@keyframes wobble{0%,100%{transform:rotate(-8deg)}50%{transform:rotate(8deg)}}
+.plate-arena{
+  background:linear-gradient(145deg,#2a8d6e,#17594a);
+  box-shadow:0 8px 0 #0d3b30,0 0 30px rgba(168,216,192,.28);
+  border-color:rgba(255,255,255,.85);
+}
+.plate-arena .ico{animation:spin 3s linear infinite;}
+@keyframes spin{to{transform:rotate(360deg)}}
+.plate .tie{position:absolute;top:10px;right:12px;font-size:26px;}
+
+.candles{display:flex;justify-content:center;gap:34px;margin-top:26px;font-size:34px;}
+.candles span{animation:flame 1.6s ease-in-out infinite;filter:drop-shadow(0 0 12px rgba(255,170,70,.9));}
+.candles span:nth-child(2){animation-delay:.5s}.candles span:nth-child(3){animation-delay:1s}
+@keyframes flame{0%,100%{transform:scale(1) rotate(-2deg)}50%{transform:scale(1.08) rotate(2deg)}}
+footer{text-align:center;font-family:'Caveat',cursive;font-size:20px;color:var(--chalk-dim);margin-top:14px;}
+
+/* ---------- penalty view ---------- */
+.back{
+  display:inline-flex;align-items:center;gap:8px;margin:2px 0 14px;
+  font-family:'Caveat',cursive;font-size:24px;font-weight:700;color:var(--sand);
+  background:none;border:2px dashed rgba(230,207,168,.5);border-radius:999px;padding:4px 16px;cursor:pointer;
+}
+.back:hover{color:#fff;border-color:var(--gold);}
+.pen-head{text-align:center;margin-bottom:12px;}
+.pen-head h2{
+  font-family:'Bungee',cursive;margin:0;font-size:clamp(32px,8vw,56px);color:#fff;line-height:1.05;
+  text-shadow:3px 3px 0 var(--red),0 0 24px rgba(210,58,70,.6);transform:rotate(-1.5deg);
+}
+.pen-head p{font-family:'Caveat',cursive;font-size:26px;color:var(--sand);margin:8px 0 0;}
+
+.ticket{
+  max-width:520px;margin:0 auto;padding:16px 16px 18px;border-radius:18px;
+  background:linear-gradient(160deg,#fff6e2,#f0dcb0);color:#3a2310;
+  border:3px solid #fff;box-shadow:0 18px 36px rgba(0,0,0,.55),0 0 40px rgba(255,200,100,.25);
+  position:relative;
+}
+.ticket:before,.ticket:after{ /* perforation notches */
+  content:"";position:absolute;top:56px;width:26px;height:26px;border-radius:50%;
+  background:#1b0f09;box-shadow:inset 0 0 8px rgba(0,0,0,.6);
+}
+.ticket:before{left:-14px}.ticket:after{right:-14px}
+.ticket-top{display:flex;justify-content:space-between;align-items:center;gap:8px;margin-bottom:12px;}
+.ticket-top b{font-family:'Bungee',cursive;font-size:15px;color:var(--red);letter-spacing:1px;}
+.ticket-top span{font-size:12px;font-weight:700;color:#7a5a38;}
+
+.scratch-area{
+  position:relative;height:210px;border-radius:12px;overflow:hidden;
+  background:
+    radial-gradient(circle at 50% 40%,#2b3a37,#141b1a);
+  border:3px solid #3a2310;
+}
+.prize{
+  position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:6px;
+  padding:12px 16px;text-align:center;color:var(--chalk);
+}
+.prize .pe{font-size:56px;line-height:1;}
+.prize .pt{font-family:'Caveat',cursive;font-weight:700;font-size:clamp(30px,7vw,40px);line-height:1;color:var(--gold);text-shadow:0 0 14px rgba(255,200,100,.4);}
+.prize .ps{font-size:12px;color:var(--chalk-dim);text-transform:uppercase;letter-spacing:1.5px;font-weight:700;}
+.prize.pop{animation:pop .6s cubic-bezier(.2,1.6,.4,1);}
+@keyframes pop{0%{transform:scale(.4);opacity:0}100%{transform:scale(1);opacity:1}}
+#scratch{
+  position:absolute;inset:0;width:100%;height:100%;touch-action:none;
+  cursor:url("data:image/svg+xml;utf8,%3Csvg xmlns='http://www.w3.org/2000/svg' width='34' height='34'%3E%3Ctext y='26' font-size='26'%3E🪙%3C/text%3E%3C/svg%3E") 17 17,crosshair;
+  transition:opacity .7s ease;
+}
+#scratch.gone{opacity:0;pointer-events:none;}
+.scratch-area.shake{animation:shake .5s;}
+@keyframes shake{0%,100%{transform:translateX(0)}15%{transform:translateX(-10px) rotate(-1deg)}30%{transform:translateX(10px) rotate(1deg)}45%{transform:translateX(-8px)}60%{transform:translateX(8px)}75%{transform:translateX(-4px)}}
+.stamp{
+  position:absolute;right:10px;top:10px;padding:2px 10px;border:3px solid var(--red2);color:var(--red2);
+  font-family:'Bungee',cursive;font-size:22px;border-radius:8px;transform:rotate(10deg);background:rgba(0,0,0,.35);
 }
 
-main{ max-width:980px; margin:0 auto; padding:26px 16px 80px; }
-.panel{
-  background:var(--panel); border:2px solid var(--line); border-radius:18px;
-  padding:20px; margin-bottom:20px;
-}
-.panel h2{ margin:0 0 4px; font-size:20px; color:var(--ice); }
-.panel .sub{ color:var(--text-dim); font-size:13px; margin:0 0 16px; }
+.meter-wrap{margin-top:14px;}
+.meter-label{display:flex;justify-content:space-between;font-size:12px;font-weight:800;color:#7a5a38;text-transform:uppercase;letter-spacing:1px;margin-bottom:4px;}
+.meter{height:14px;border-radius:999px;background:#d7bd8c;border:2px solid #3a2310;overflow:hidden;}
+.meter i{display:block;height:100%;width:0;background:linear-gradient(90deg,var(--mint),var(--amber),var(--red2));transition:width .15s;}
+.comment{min-height:30px;margin-top:10px;text-align:center;font-family:'Caveat',cursive;font-size:25px;font-weight:700;color:#7d1620;line-height:1.1;}
 
-/* buttons / inputs */
-button{ font-family:'Rubik',sans-serif; cursor:pointer; }
+.ticket-actions{display:flex;gap:10px;margin-top:12px;}
 .btn{
-  border:none; border-radius:10px; padding:11px 18px; font-weight:700;
-  color:#fff; background:linear-gradient(135deg,var(--orange),var(--red));
-  box-shadow:0 3px 0 #9c1f2e; transition:transform .1s;
+  flex:1;border:none;border-radius:12px;padding:12px 10px;font-family:'Rubik',sans-serif;font-weight:800;font-size:14px;cursor:pointer;color:#fff;
+  transition:transform .1s;
 }
-.btn:active{ transform:translateY(2px); box-shadow:0 1px 0 #9c1f2e; }
-.btn.ice{ background:linear-gradient(135deg,#3fb8e0,var(--ice)); box-shadow:0 3px 0 #1c7a9c; color:#052233;}
-.btn.green{ background:linear-gradient(135deg,#1f9f5c,var(--green)); box-shadow:0 3px 0 #12693a;}
-.btn.gold{ background:linear-gradient(135deg,#d69b1e,var(--gold)); box-shadow:0 3px 0 #8f6812; color:#3a2900;}
-.btn.small{ padding:7px 12px; font-size:12px; border-radius:8px; }
-.btn:disabled{ opacity:.35; cursor:not-allowed; }
-input[type=text], select, textarea{
-  background:var(--bg2); border:2px solid var(--line); border-radius:10px;
-  color:var(--text); padding:9px 12px; font-family:'Rubik',sans-serif; font-size:14px;
-  width:100%;
-}
-input[type=text]:focus, select:focus{ outline:none; border-color:var(--ice); }
+.btn:active{transform:translateY(2px);}
+.btn.new{background:linear-gradient(135deg,#2a8d6e,#17594a);box-shadow:0 4px 0 #0d3b30;}
+.btn.giveup{background:linear-gradient(135deg,#c22a38,#7d1620);box-shadow:0 4px 0 #4d0c14;}
+.btn:disabled{opacity:.4;cursor:not-allowed;}
 
-/* players grid */
-.player-grid{ display:grid; grid-template-columns:repeat(auto-fill,minmax(140px,1fr)); gap:14px; }
-.player-card{
-  background:var(--panel2); border:2px solid var(--line); border-radius:14px;
-  padding:12px; text-align:center; position:relative;
+details.menu{
+  max-width:520px;margin:20px auto 0;padding:14px 18px;border-radius:12px;
+  background:linear-gradient(145deg,var(--board),var(--board2));border:3px solid #7a4a22;
 }
-.player-photo{
-  width:78px;height:78px;border-radius:50%;object-fit:cover;
-  border:3px solid var(--gold); margin:0 auto 8px; display:block;
-  background:var(--bg2);
-}
-.player-photo.placeholder{
-  display:flex; align-items:center; justify-content:center;
-  font-size:26px; color:var(--text-dim);
-}
-.player-card .pname{ font-weight:700; font-size:14px; word-break:break-word;}
-.player-card label.up{
-  display:inline-block; margin-top:8px; font-size:11px; color:var(--ice);
-  border:1px dashed var(--ice); border-radius:8px; padding:4px 8px; cursor:pointer;
-}
-.player-card .del{
-  position:absolute; top:6px; right:8px; background:none; border:none;
-  color:var(--red); font-size:16px; font-weight:800; padding:0;
-}
-.add-player-row{ display:flex; gap:10px; margin-top:16px; }
-.add-player-row input{ flex:1; }
+details.menu summary{font-family:'Caveat',cursive;font-size:28px;font-weight:700;cursor:pointer;color:var(--chalk);}
+details.menu ul{margin:10px 0 0;padding-left:0;list-style:none;font-family:'Caveat',cursive;font-size:24px;color:var(--chalk);}
+details.menu li{padding:3px 0;border-bottom:1px dashed rgba(244,241,230,.18);}
+details.menu li:before{content:"✦ ";color:var(--gold);}
 
-/* matches */
-.match{
-  display:flex; align-items:center; gap:10px; background:var(--panel2);
-  border:1px solid var(--line); border-radius:12px; padding:10px 12px; margin-bottom:8px;
-}
-.match .mp{ flex:1; display:flex; align-items:center; gap:8px; font-weight:600; font-size:14px; }
-.match .mp img{ width:30px;height:30px;border-radius:50%;object-fit:cover; border:2px solid var(--line); }
-.match .vs{ color:var(--text-dim); font-size:12px; font-family:'Bungee',cursive; }
-.match button.pick{
-  border:2px solid var(--line); background:var(--bg2); color:var(--text);
-  border-radius:8px; padding:6px 10px; font-size:12px; font-weight:700;
-}
-.match button.pick.won{ background:linear-gradient(135deg,var(--green),#1f9f5c); border-color:var(--green); color:#04220f; }
-.round-title{ font-family:'Bungee',cursive; color:var(--gold); font-size:14px; margin:18px 0 8px; }
-
-/* standings table */
-table.stats{ width:100%; border-collapse:collapse; font-size:13px; }
-table.stats th, table.stats td{ padding:8px 6px; text-align:left; border-bottom:1px solid var(--line); }
-table.stats th{ color:var(--ice); font-size:11px; text-transform:uppercase; letter-spacing:.5px; }
-table.stats tr:hover{ background:rgba(255,255,255,.03); }
-table.stats img{ width:26px;height:26px;border-radius:50%;object-fit:cover; vertical-align:middle; margin-right:6px; border:1px solid var(--line);}
-
-/* bracket */
-.bracket{ display:flex; gap:22px; overflow-x:auto; padding-bottom:10px; }
-.bracket-round{ display:flex; flex-direction:column; justify-content:space-around; min-width:190px; gap:14px; }
-.bmatch{ background:var(--panel2); border:2px solid var(--line); border-radius:10px; padding:8px; }
-.bmatch .bp{ display:flex; justify-content:space-between; align-items:center; padding:5px 6px; border-radius:6px; font-size:13px; font-weight:600; }
-.bmatch .bp.win{ background:rgba(47,214,122,.18); color:var(--green); }
-.bmatch .bp button{ background:none;border:1px solid var(--line); border-radius:6px; color:var(--text-dim); font-size:10px; padding:2px 6px;}
-
-/* wheel */
-.wheel-stage{ display:flex; flex-direction:column; align-items:center; gap:16px; }
-.wheel{
-  width:220px; height:220px; border-radius:50%; position:relative;
-  border:6px solid var(--gold); box-shadow:0 0 30px rgba(255,193,69,.35), inset 0 0 20px rgba(0,0,0,.4);
-  display:flex; align-items:center; justify-content:center; text-align:center;
-  background:conic-gradient(var(--red),var(--orange),var(--gold),var(--ice),var(--green),var(--red));
-  transition: transform 3.2s cubic-bezier(.15,.8,.15,1);
-}
-.wheel-inner{
-  width:150px;height:150px;border-radius:50%;background:var(--bg2);
-  display:flex;align-items:center;justify-content:center; padding:10px;
-  font-family:'Bungee',cursive; font-size:13px; color:var(--text); line-height:1.3;
-}
-.wheel-pointer{ font-size:26px; margin-bottom:-6px; }
-.stake-tags{ display:flex; flex-wrap:wrap; gap:8px; margin-top:10px; }
-.tag{ background:var(--bg2); border:1px solid var(--line); border-radius:999px; padding:5px 12px; font-size:12px; display:flex; align-items:center; gap:6px;}
-.tag button{ background:none;border:none;color:var(--red);font-weight:800;font-size:13px;}
-
-.empty{ color:var(--text-dim); font-size:13px; padding:14px; text-align:center; border:1px dashed var(--line); border-radius:10px;}
-.award{ display:flex; align-items:center; gap:10px; background:var(--panel2); border:1px solid var(--line); border-radius:12px; padding:10px 14px; margin-bottom:8px;}
-.award .medal{ font-size:24px; }
-.award b{ color:var(--gold); }
-.hidden{display:none !important;}
-
-/* ---------- podium ---------- */
-.podium{ display:grid; grid-template-columns:repeat(3,1fr); gap:12px; }
-.podium-card{ background:var(--panel2); border:2px solid var(--line); border-radius:14px; padding:18px 12px; text-align:center; }
-.podium-card.p1{ border-color:var(--gold); background:linear-gradient(160deg,rgba(255,193,69,.14),var(--panel2)); order:2; }
-.podium-card.p2{ border-color:#c9d4f5; background:linear-gradient(160deg,rgba(201,212,245,.10),var(--panel2)); order:1; }
-.podium-card.p3{ border-color:#e08a4d; background:linear-gradient(160deg,rgba(224,138,77,.12),var(--panel2)); order:3; }
-.podium-medal{ font-size:26px; }
-.podium-name{ font-family:'Bungee',cursive; font-size:15px; margin:6px 0 2px; color:var(--text); }
-.podium-blade{ font-size:11px; color:var(--text-dim); margin-bottom:8px; }
-.podium-record{ font-size:20px; font-weight:800; color:var(--ice); }
-.podium-wr{ display:inline-block; margin-top:6px; font-size:11px; font-weight:700; padding:3px 10px; border-radius:999px; background:var(--bg2); }
-
-/* ---------- leaderboard ---------- */
-.lb-row{ display:flex; align-items:center; gap:12px; background:var(--panel2); border:1px solid var(--line); border-radius:12px; padding:10px 14px; margin-bottom:8px; }
-.lb-rank{ width:30px; text-align:center; font-family:'Bungee',cursive; font-size:14px; color:var(--text-dim); flex-shrink:0; }
-.lb-rank.medal{ font-size:20px; }
-.lb-photo{ width:34px;height:34px;border-radius:50%;object-fit:cover;border:2px solid var(--line); flex-shrink:0;}
-.lb-name{ flex:1; min-width:110px; }
-.lb-name .n{ font-weight:700; font-size:14px; }
-.lb-name .b{ font-size:11px; color:var(--text-dim); }
-.lb-stat{ text-align:center; min-width:70px; }
-.lb-stat .lab{ font-size:9px; text-transform:uppercase; letter-spacing:.5px; color:var(--text-dim); }
-.lb-stat .val{ font-weight:800; font-size:14px; }
-.lb-wr{ font-weight:800; font-size:14px; padding:3px 10px; border-radius:999px; min-width:56px; text-align:center; }
-
-/* ---------- head-to-head matrix ---------- */
-.h2h-scroll{ overflow-x:auto; }
-table.h2h{ border-collapse:collapse; font-size:12px; min-width:100%; }
-table.h2h th, table.h2h td{ padding:8px; text-align:center; border:1px solid var(--line); white-space:nowrap; }
-table.h2h th.corner{ background:var(--panel2); }
-table.h2h th.rowhead{ text-align:left; background:var(--panel2); position:sticky; left:0; z-index:2; }
-table.h2h thead th{ background:var(--panel2); color:var(--ice); font-weight:700; position:sticky; top:0; z-index:1; }
-table.h2h thead th.corner{ z-index:3; }
-table.h2h .pn{ font-weight:700; color:var(--text); display:block; }
-table.h2h .pb{ font-size:10px; color:var(--text-dim); font-weight:400; }
-.h2h-cell{ min-width:64px; }
-.h2h-cell .rec{ font-weight:800; display:block; }
-.h2h-cell .pct{ font-size:10px; opacity:.85; }
-.h2h-none{ color:var(--text-dim); background:var(--bg2); }
-.h2h-hi{ background:rgba(47,214,122,.22); color:#7cf0ac; }
-.h2h-mid{ background:rgba(255,193,69,.20); color:#ffd88a; }
-.h2h-lo{ background:rgba(229,56,77,.20); color:#ff9aa6; }
-.h2h-diag{ background:var(--bg); }
-.legend{ display:flex; gap:16px; flex-wrap:wrap; margin-top:10px; font-size:11px; color:var(--text-dim); }
-.legend span{ display:inline-flex; align-items:center; gap:6px; }
-.legend i{ width:12px;height:12px;border-radius:3px;display:inline-block; }
-footer{ text-align:center; color:var(--text-dim); font-size:12px; padding:20px; }
-
-/* ===== STARÝ PUŠKY OVERDRIVE THEME ===== */
-:root{
-  --bg:#03050a; --bg2:#070b13; --panel:#0a101b; --panel2:#0e1725;
-  --line:#26344d; --orange:#ff3b16; --red:#ff1744; --ice:#16d9ff;
-  --gold:#ffd21f; --green:#36f58b; --text:#f7f9ff; --text-dim:#8291ab;
-  --fire:#ff5a1f; --violet:#8b5cff;
-}
-body{
-  background:
-    radial-gradient(circle at 12% 8%, rgba(255,59,22,.18), transparent 30%),
-    radial-gradient(circle at 88% 12%, rgba(22,217,255,.14), transparent 28%),
-    radial-gradient(circle at 50% 65%, rgba(139,92,255,.08), transparent 35%),
-    repeating-linear-gradient(115deg,rgba(255,255,255,.018) 0 2px,transparent 2px 12px),var(--bg);
-}
-body:before{content:"";position:fixed;inset:0;pointer-events:none;z-index:-1;background:linear-gradient(transparent 49%,rgba(255,23,68,.035) 50%,transparent 51%);background-size:100% 8px;}
-.hero{padding:26px 20px 24px;border-bottom:4px solid var(--red);background:radial-gradient(circle at 25% 50%,rgba(255,59,22,.22),transparent 30%),radial-gradient(circle at 75% 50%,rgba(22,217,255,.2),transparent 30%),linear-gradient(180deg,#070b14,#02040a);overflow:hidden;}
-.hero:before,.hero:after{content:"🌀";position:absolute;font-size:180px;line-height:1;opacity:.08;filter:blur(1px);animation:spin 7s linear infinite;top:-30px;}
-.hero:before{left:-25px;color:var(--fire)} .hero:after{right:-25px;color:var(--ice);animation-direction:reverse}
-.hero .top-spin{width:128px;height:128px;background:conic-gradient(var(--red),var(--gold),var(--orange),var(--ice),var(--violet),var(--red));border:5px solid #fff;box-shadow:0 0 0 8px #080c16,0 0 18px rgba(255,59,22,.8),0 0 55px rgba(22,217,255,.35);}
-.hero h1{font-size:clamp(34px,8vw,68px);color:#fff;text-shadow:4px 4px 0 var(--red),-3px -3px 0 var(--ice),0 0 22px rgba(255,255,255,.25);letter-spacing:2px;transform:skew(-4deg);}
-.hero h1 .puppy{color:var(--gold);}
-.hero p{color:#c9d4e8;font-weight:700;text-transform:uppercase;letter-spacing:1.5px;}
-.hero .crew-tag{display:inline-block;margin-top:12px;padding:7px 14px;border:2px solid var(--gold);border-radius:999px;background:rgba(255,210,31,.08);color:var(--gold);font-family:'Bungee',cursive;font-size:12px;box-shadow:0 0 18px rgba(255,210,31,.15);}
-nav.tabs{background:rgba(3,5,10,.92);border-bottom:2px solid #172238;backdrop-filter:blur(12px);}
-nav.tabs button{background:linear-gradient(180deg,#101a2b,#070c15);border-color:#2b3a55;border-radius:9px;text-transform:uppercase;box-shadow:inset 0 0 0 1px rgba(255,255,255,.03);}
-nav.tabs button.active{background:linear-gradient(135deg,#ff4b18,#d70035);border-color:var(--gold);box-shadow:0 0 18px rgba(255,23,68,.35),0 4px 14px rgba(255,59,22,.25);}
-.panel{background:linear-gradient(145deg,rgba(14,23,37,.96),rgba(5,9,16,.98));border-color:#243653;border-radius:12px;box-shadow:0 14px 35px rgba(0,0,0,.35),inset 0 1px 0 rgba(255,255,255,.035);position:relative;overflow:hidden;}
-.panel:before{content:"";position:absolute;left:0;top:0;width:34%;height:3px;background:linear-gradient(90deg,var(--red),var(--gold),transparent);}
-.panel h2{color:var(--gold);text-transform:uppercase;text-shadow:0 0 12px rgba(255,210,31,.18);}
-.player-card{background:linear-gradient(145deg,#101b2b,#070c14);border-color:#2c3d5b;box-shadow:0 8px 18px rgba(0,0,0,.3);transition:.18s;}
-.player-card:hover{transform:translateY(-4px) rotate(-.4deg);border-color:var(--red);box-shadow:0 12px 25px rgba(255,23,68,.15);}
-.player-photo{border-color:var(--gold);box-shadow:0 0 18px rgba(255,210,31,.18);}
-.player-card .blade-badge{display:inline-flex;align-items:center;gap:6px;margin-top:8px;padding:4px 8px;border-radius:999px;background:#070c14;border:1px solid #33445f;color:#dce7f7;font-size:11px;font-weight:800;}
-.blade-mini{width:32px;height:32px;border-radius:50%;display:inline-flex;align-items:center;justify-content:center;background:conic-gradient(var(--red),var(--gold),var(--ice),var(--violet),var(--red));border:2px solid #fff;box-shadow:0 0 12px rgba(22,217,255,.25);font-size:17px;animation:spin 4s linear infinite;}
-.player-card .protect{display:block;margin-top:8px;font-size:10px;color:var(--green);font-weight:800;letter-spacing:.4px;}
-.player-card .del{color:#ff526f;background:#160812;border-radius:50%;width:24px;height:24px;line-height:20px;}
-.btn{background:linear-gradient(135deg,#ff4b18,#e0003b);box-shadow:0 3px 0 #8f0c2c,0 0 16px rgba(255,59,22,.14);}
-.btn.ice{background:linear-gradient(135deg,#0b9fd0,#18e0ff);}
-.btn.gold{background:linear-gradient(135deg,#c99300,#ffd21f);}
-.btn.green{background:linear-gradient(135deg,#159c5a,#36f58b);}
-.match,.bmatch,.award{background:linear-gradient(145deg,#101a29,#080e18);border-color:#2b3c58;}
-.match .vs,.vs{color:var(--gold);font-family:'Bungee',cursive;}
-.round-title{color:var(--red);text-shadow:0 0 12px rgba(255,23,68,.25);}
-.wheel{border-color:#fff;background:conic-gradient(var(--red),var(--orange),var(--gold),var(--ice),var(--violet),var(--red));box-shadow:0 0 0 6px #111827,0 0 45px rgba(255,23,68,.4),0 0 70px rgba(22,217,255,.2);}
-.wheel-inner{background:radial-gradient(circle,#151f31,#05080e);border:2px solid #31415d;}
-footer{color:#6f7e96;text-transform:uppercase;letter-spacing:1px;}
-.arena-strip{display:flex;align-items:center;justify-content:center;gap:18px;margin:0 auto 18px;max-width:980px;padding:10px 16px;border:1px solid #263753;border-radius:999px;background:rgba(7,12,20,.82);box-shadow:0 0 25px rgba(0,0,0,.3);font-weight:900;text-transform:uppercase;font-size:12px;letter-spacing:1px;}
-.arena-strip .blade-mini{width:28px;height:28px;flex:none;}
-.versus-line{display:flex;align-items:center;justify-content:center;gap:12px;color:#fff;font-family:'Bungee',cursive;font-size:12px;margin:10px 0;}
-.versus-line b{color:var(--red);font-size:18px;text-shadow:0 0 10px rgba(255,23,68,.5);}
-.pin-note{margin-top:8px;padding:9px 12px;border:1px dashed #3a4c69;border-radius:9px;color:#aebbd0;background:rgba(255,255,255,.025);font-size:11px;}
-@media(max-width:650px){.hero .top-spin{width:92px;height:92px}.hero h1{font-size:34px}.arena-strip{border-radius:10px}.panel{padding:15px}.player-grid{grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}}
-
-
-/* ---------------- backups / reset ---------------- */
-.backup-panel{border:1px solid rgba(255,59,92,.55);background:linear-gradient(135deg,rgba(255,32,64,.08),rgba(0,0,0,.18));}
-.backup-actions{display:flex;gap:10px;flex-wrap:wrap;align-items:center;margin:12px 0;}
-.backup-list{display:grid;gap:8px;margin-top:12px;}
-.backup-item{display:flex;align-items:center;justify-content:space-between;gap:10px;padding:12px 14px;border:1px solid var(--line);border-radius:12px;background:rgba(7,14,27,.8);}
-.backup-meta{display:flex;flex-direction:column;gap:3px;}
-.backup-name{font-weight:800;color:var(--text);}
-.backup-date{font-size:12px;color:var(--text-dim);}
-.backup-buttons{display:flex;gap:6px;flex-wrap:wrap;}
-.danger{border-color:#ff3658!important;color:#fff!important;background:linear-gradient(135deg,#8d1028,#ef2346)!important;}
-@media(max-width:600px){.backup-item{align-items:flex-start;flex-direction:column}.backup-buttons{width:100%}.backup-buttons .btn{flex:1}}
-
-.management-hero{
-  border-color:rgba(255,210,31,.45);
-  background:
-    radial-gradient(circle at 90% 0%,rgba(22,217,255,.12),transparent 28%),
-    radial-gradient(circle at 0% 100%,rgba(255,23,68,.12),transparent 32%),
-    linear-gradient(145deg,#101827,#05080e);
-}
-.manage-kicker{
-  display:inline-block;
-  margin-bottom:8px;
-  color:var(--red);
-  font-family:'Bungee',cursive;
-  font-size:11px;
-  letter-spacing:1px;
-}
-.management-hero h2{
-  font-size:clamp(24px,5vw,36px);
-  margin-bottom:5px;
-}
-.manage-warning{
-  display:flex;
-  align-items:flex-start;
-  gap:12px;
-  margin:18px 0;
-  padding:14px;
-  border:1px solid rgba(255,59,92,.45);
-  border-radius:12px;
-  background:rgba(255,23,68,.07);
-}
-.manage-warning-icon{font-size:25px;line-height:1}
-.manage-warning b{display:block;color:#fff;margin-bottom:3px}
-.manage-warning span{display:block;color:#aebbd0;font-size:12px;line-height:1.45}
-.management-actions{margin-top:10px}
-.backup-title-row{
-  display:flex;
-  align-items:center;
-  justify-content:space-between;
-  gap:10px;
-  margin-top:24px;
-  margin-bottom:8px;
-}
-.backup-title-row h3{margin:0;color:var(--ice);font-size:16px}
-.backup-count{
-  color:var(--text-dim);
-  font-size:11px;
-  border:1px solid var(--line);
-  border-radius:999px;
-  padding:5px 9px;
-}
-
+.confetto{position:fixed;top:-40px;z-index:50;pointer-events:none;animation:drop var(--d) linear forwards;}
+@keyframes drop{to{transform:translateY(112vh) rotate(var(--r));}}
 </style>
 </head>
 <body>
 
-<div class="hero snow-wrap" id="snowWrap">
-  <div class="top-spin"></div>
-  <h1><span class="puppy">STARÝ PUŠKY</span><br>BEYBLADE ARÉNA</h1>
-  <p>SPIN. SMASH. REPEAT. Jedna aréna, jeden vítěz a parta Starých Pušek.</p>
-  <div class="crew-tag">🔥 TOČÍME • BOJUJEME • SÁZÍME • ŽIJEME 🔥</div>
-</div>
-<div class="arena-strip"><span class="blade-mini">🌀</span> STARÝ PUŠKY • LET IT RIP! <span class="blade-mini">🌀</span></div>
-
-<nav class="tabs">
-  <button data-tab="players" class="active">🌀 Bojovníci</button>
-  <button data-tab="t1">⚔️ Aréna</button>
-  <button data-tab="t2">💀 Panák-Beyblade</button>
-  <button data-tab="stats">🏆 Síň slávy</button>
-  <button data-tab="manage">⚙️ Správa</button>
-</nav>
+<div class="bokeh" id="bokeh"></div>
+<div class="lights" id="lights"></div>
 
 <main>
 
-  <!-- PLAYERS TAB -->
-  <section id="tab-players" class="tab-content">
-    <div class="panel">
-      <h2>🔥 Bojovníci Starých Pušek</h2>
-      <p class="sub">Každý bojovník má svého Beyblade. Svého si může upravovat jen on — ostatním do něj ruce necpeme.</p>
-      <div id="playerGrid" class="player-grid"></div>
-      <div class="pin-note">🔒 <b>Ochrana Beyblade:</b> při přidání si každý nastaví 4místný PIN. Bez správného PINu nejde změnit fotku ani mazat hráče/Beyblade. Tohle je ochrana proti kamarádskému trollení, ne bankovní zabezpečení.</div>
-      <div class="add-player-row">
-        <input type="text" id="newPlayerName" placeholder="Jméno hráče...">
-        <input type="text" id="newPlayerBlade" placeholder="Název Beyblade (nepovinné)...">
-        <input type="password" id="newPlayerPin" inputmode="numeric" maxlength="4" placeholder="PIN 4 čísla">
-        <button class="btn" id="addPlayerBtn">+ Přidat bojovníka</button>
+  <!-- ===================== ROZCESTNÍK ===================== -->
+  <section id="view-hub">
+    <div class="hero">
+      <div class="kicker">✨ Vánoční besídka ✨</div>
+      <h1>STARÝ<br>PUŠKY</h1>
+      <p>Co si dneska dáme, pánové?</p>
+    </div>
+
+    <div class="board">
+      <div class="board-title">Dnešní menu<small>vyber si, na čem si pochutnáš</small></div>
+      <div class="menu-grid">
+        <button class="plate plate-penalty" id="goPenalty">
+          <span class="tie">🎀</span>
+          <span class="ico">🥃</span>
+          <span class="t">Máš trestnej!</span>
+          <span class="d">Škrábni los a uvidíš, co tě čeká</span>
+        </button>
+        <a class="plate plate-arena" href="arena.html">
+          <span class="tie">🎀</span>
+          <span class="ico">🌀</span>
+          <span class="t">Beyblade aréna</span>
+          <span class="d">Turnaj, pavouk a sázky o panáky</span>
+        </a>
       </div>
     </div>
+
+    <div class="candles"><span>🕯️</span><span>🕯️</span><span>🕯️</span></div>
+    <footer>Sestrojeno v tajné dílně Starých Pušek 🎄</footer>
   </section>
 
-  <!-- TOURNAMENT 1 -->
-  <section id="tab-t1" class="tab-content hidden">
-    <div class="panel">
-      <h2>Fáze 1 — Každý s každým</h2>
-      <p class="sub">Rozpis je poskládaný tak, aby žádný hráč neměl 3 zápasy za sebou v řadě. Klikněte na vítěze každého zápasu.</p>
-      <div id="rrControls"></div>
-      <div id="rrMatches"></div>
-    </div>
-    <div class="panel">
-      <h2>Průběžná tabulka</h2>
-      <div id="rrStandings"></div>
-    </div>
-    <div class="panel">
-      <h2>Fáze 2 — Pavouk</h2>
-      <p class="sub">Postupuje nejlepších 8 (podle výher z ligy). Čtvrtfinále → semifinále → finále.</p>
-      <div id="bracketControls"></div>
-      <div id="bracketArea"></div>
-    </div>
-  </section>
+  <!-- ===================== MÁŠ TRESTNEJ ===================== -->
+  <section id="view-penalty" hidden>
+    <button class="back" id="backBtn">← zpátky na menu</button>
 
-  <!-- TOURNAMENT 2 -->
-  <section id="tab-t2" class="tab-content hidden">
-    <div class="panel">
-      <h2>Sázky večera</h2>
-      <p class="sub">Co se hraje, když prohraješ? Přidej vlastní sázky, nebo použij ty vánoční.</p>
-      <div id="stakeTags" class="stake-tags"></div>
-      <div class="add-player-row">
-        <input type="text" id="newStake" placeholder="Nová sázka (např. Panák jägeru)...">
-        <button class="btn gold" id="addStakeBtn">+ Přidat sázku</button>
-      </div>
+    <div class="pen-head">
+      <h2>MÁŠ<br>TRESTNEJ!</h2>
+      <p>Škrábej, ať se nezlobí barman.</p>
     </div>
-    <div class="panel">
-      <h2>Souboj + kolo štěstí</h2>
-      <div id="duelPickers"></div>
-      <div class="wheel-stage">
-        <div class="wheel-pointer">🔻</div>
-        <div class="wheel" id="wheel"><div class="wheel-inner" id="wheelText">Roztoč kolo</div></div>
-        <button class="btn" id="spinBtn">🎡 Roztočit kolo osudu</button>
-        <div id="duelResult"></div>
-      </div>
-    </div>
-    <div class="panel">
-      <h2>Historie soubojů</h2>
-      <div id="t2Log"></div>
-    </div>
-  </section>
 
+    <div class="ticket">
+      <div class="ticket-top"><b>STÍRACÍ LOS · STARÉ PUŠKY</b><span id="ticketNo">Los č. 001</span></div>
 
-  <!-- MANAGEMENT TAB -->
-  <section id="tab-manage" class="tab-content hidden">
-    <div class="panel management-hero">
-      <div class="manage-kicker">⚙️ STARÝ PUŠKY CONTROL ROOM</div>
-      <h2>Správa turnaje</h2>
-      <p class="sub">Tady máš všechno pro zálohy a nový start turnaje. Výsledky může zapisovat každý, ale reset je schválně schovaný tady.</p><div class="pin-note">☁️ <b>Zálohy jsou uložené v Supabase, ne v prohlížeči.</b> Aktualizace stránky nebo nahrání nového index.html je nemaže.</div>
-
-      <div class="manage-warning">
-        <div class="manage-warning-icon">☢️</div>
-        <div>
-          <b>Vynulování výsledků</b>
-          <span>Hráči, Beyblady a seznam sázek zůstanou. Vynulují se výsledky ligy, pavouk a Panák-Beyblade.</span>
+      <div class="scratch-area" id="scratchArea">
+        <div class="prize" id="prize">
+          <div class="pe" id="prizeEmoji">🥃</div>
+          <div class="pt" id="prizeText">…</div>
+          <div class="ps" id="prizeSub"></div>
         </div>
+        <div class="stamp" id="stamp" hidden>×2</div>
+        <canvas id="scratch"></canvas>
       </div>
 
-      <div class="backup-actions management-actions">
-        <button class="btn gold" id="backupBtn">💾 Vytvořit zálohu</button>
-        <button class="btn danger" id="resetBtn">☢️ Vynulovat výsledky</button>
+      <div class="meter-wrap">
+        <div class="meter-label"><span>Odvaha</span><span id="meterPct">0 %</span></div>
+        <div class="meter"><i id="meterBar"></i></div>
       </div>
+      <div class="comment" id="comment" aria-live="polite"></div>
 
-      <div class="backup-title-row">
-        <h3>💾 Uložené zálohy</h3>
-        <span class="backup-count" id="backupCount">0 záloh</span>
+      <div class="ticket-actions">
+        <button class="btn giveup" id="giveUpBtn">🏳️ Vzdát se</button>
+        <button class="btn new" id="newBtn">🎟️ Další los</button>
       </div>
-      <div id="backupList" class="backup-list"></div>
     </div>
-  </section>
 
-  <!-- STATS -->
-  <section id="tab-stats" class="tab-content hidden">
-    <div class="panel">
-      <h2>Vánoční ocenění</h2>
-      <div id="awards"></div>
-    </div>
-    <div class="panel">
-      <h2>🏅 Top 3 nejvíc výher</h2>
-      <p class="sub">Součet výher ze všech soubojů — liga, pavouk i panák-beyblade.</p>
-      <div id="podium"></div>
-    </div>
-    <div class="panel">
-      <h2>Celkový žebříček</h2>
-      <div id="leaderboard"></div>
-    </div>
-    <div class="panel">
-      <h2>Vzájemné zápasy</h2>
-      <p class="sub">Bilance řádkového hráče proti sloupcovému (výhry-prohry a úspěšnost).</p>
-      <div class="h2h-scroll" id="h2hArea"></div>
-      <div class="legend">
-        <span><i style="background:rgba(47,214,122,.4)"></i>60 %+ úspěšnost</span>
-        <span><i style="background:rgba(255,193,69,.4)"></i>40–60 % úspěšnost</span>
-        <span><i style="background:rgba(229,56,77,.4)"></i>pod 40 %</span>
-      </div>
-    </div>
-    <div class="panel">
-      <h2>Rozpad podle turnajů</h2>
-      <div id="statsTable"></div>
-    </div>
+    <details class="menu">
+      <summary>📜 Jídelní lístek trestů</summary>
+      <ul id="prizeList"></ul>
+    </details>
   </section>
 
 </main>
-<footer>Sestrojeno v tajné dílně Starých Pušek · SPIN • SMASH • REPEAT 🌀🔥</footer>
 
 <script>
-/* ---------------- utilities ---------------- */
-function esc(s){ return (s||'').replace(/[&<>"']/g, c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c])); }
-function uid(){ return Math.random().toString(36).slice(2,10); }
-const DEFAULT_STAKES = [
-  "Panák rumu","Panák ginu","Svařák na ex","Panák Fernetu","Doušek vaječného koňaku",
-  "Sníst kousek perníčku bez použití rukou","Zazpívat sloku koledy",
-  "Nosit trapnou vánoční čepici 3 kola","10 dřepů v sobolí čepici","Napsat vítězi vlastní vánoční přání"
-];
-
-let state = {
-  players: [],
-  t1: { schedule: [], playoff: null },
-  t2: { stakes: DEFAULT_STAKES.slice(), log: [] },
-  backups: []
-};
-/* ---------------- Supabase shared storage ---------------- */
-// VLOŽ SEM ÚDAJE Z TVÉHO SUPABASE PROJEKTU
-const SUPABASE_URL = "https://tbmelumxvcslhkzixfcr.supabase.co";
-const SUPABASE_ANON_KEY = "sb_publishable_WDMRMU5v4Hac1W30oJDh7w_XoI5TEvP";
-const STATE_TABLE = "beyblade_state";
-const STATE_ID = 1;
-
-let saveTimer = null;
-let saveInProgress = false;
-let pendingSave = false;
-
-function supabaseHeaders(extra={}){
-  return {
-    'apikey': SUPABASE_ANON_KEY,
-    'Authorization': `Bearer ${SUPABASE_ANON_KEY}`,
-    'Content-Type': 'application/json',
-    ...extra
-  };
-}
-
-function normalizeState(){
-  if(!state.t1) state.t1 = { schedule: [], playoff: null };
-  if(!state.t2) state.t2 = { stakes: DEFAULT_STAKES.slice(), log: [] };
-  if(!state.players) state.players = [];
-  state.players.forEach(p=>{ if(p.pin===undefined) p.pin=null; });
-  if(!Array.isArray(state.t1.schedule)) state.t1.schedule = [];
-  if(!Array.isArray(state.t2.stakes)) state.t2.stakes = DEFAULT_STAKES.slice();
-  if(!Array.isArray(state.t2.log)) state.t2.log = [];
-  if(!Array.isArray(state.backups)) state.backups = [];
-}
-
-
-async function loadState(){
-  try{
-    const res = await fetch(`${SUPABASE_URL}/rest/v1/${STATE_TABLE}?id=eq.${STATE_ID}&select=state`, {
-      headers: supabaseHeaders()
-    });
-    if(!res.ok) throw new Error(`HTTP ${res.status}`);
-    const rows = await res.json();
-    if(rows[0] && rows[0].state){ state = rows[0].state; }
-  }catch(e){
-    console.error('Načtení turnaje selhalo', e);
+/* ---------------- ambient ---------------- */
+(function(){
+  const bokeh=document.getElementById('bokeh');
+  for(let i=0;i<26;i++){
+    const el=document.createElement('i');
+    const s=24+Math.random()*90;
+    el.style.width=el.style.height=s+'px';
+    el.style.left=(Math.random()*100)+'%';
+    el.style.top=(Math.random()*100)+'%';
+    el.style.animationDuration=(3+Math.random()*5)+'s';
+    el.style.animationDelay=(-Math.random()*6)+'s';
+    bokeh.appendChild(el);
   }
-  normalizeState();
-  renderAll();
-}
-
-async function writeState(){
-  if(saveInProgress){ pendingSave = true; return; }
-  saveInProgress = true;
-  pendingSave = false;
-  try{
-    const res = await fetch(`${SUPABASE_URL}/rest/v1/${STATE_TABLE}`, {
-      method:'POST',
-      headers:supabaseHeaders({ 'Prefer':'resolution=merge-duplicates,return=minimal' }),
-      body: JSON.stringify({ id: STATE_ID, state, updated_at: new Date().toISOString() })
-    });
-    if(!res.ok){
-      const text = await res.text();
-      throw new Error(`HTTP ${res.status}: ${text}`);
-    }
-  }catch(e){
-    console.error('Uložení turnaje selhalo', e);
-    alert('Nepodařilo se uložit změnu do databáze. Zkontroluj připojení k internetu.');
-  }finally{
-    saveInProgress = false;
-    if(pendingSave) writeState();
-  }
-}
-
-function save(){
-  clearTimeout(saveTimer);
-  saveTimer = setTimeout(writeState, 250);
-}
-
-async function refreshSharedState(){
-  if(saveInProgress || saveTimer) return;
-  try{
-    const res = await fetch(`${SUPABASE_URL}/rest/v1/${STATE_TABLE}?id=eq.${STATE_ID}&select=state,updated_at`, {
-      headers: supabaseHeaders()
-    });
-    if(!res.ok) return;
-    const rows = await res.json();
-    if(rows[0] && rows[0].state){
-      state = rows[0].state;
-      normalizeState();
-      renderAll();
-    }
-  }catch(e){
-    console.error('Obnovení turnaje selhalo', e);
-  }
-}
-
-function player(id){ return state.players.find(p=>p.id===id); }
-
-/* ---------------- backups / reset ---------------- */
-function cloneResultState(){
-  return {
-    schedule: state.t1.schedule.map(m=>({id:m.id,a:m.a,b:m.b,winner:m.winner||null})),
-    playoff: state.t1.playoff ? JSON.parse(JSON.stringify(state.t1.playoff)) : null,
-    panakLog: state.t2.log.map(l=>JSON.parse(JSON.stringify(l)))
-  };
-}
-async function makeBackup(label){
-  normalizeState();
-  const backup = {
-    id: uid(),
-    name: label || ('Záloha ' + new Date().toLocaleString('cs-CZ')),
-    createdAt: new Date().toISOString(),
-    data: cloneResultState()
-  };
-  state.backups.unshift(backup);
-  if(state.backups.length>20) state.backups = state.backups.slice(0,20);
-  renderBackups();
-  await writeState(); // záloha se zapíše ihned do Supabase
-  return backup;
-}
-async function restoreBackup(id){
-  const b = state.backups.find(x=>x.id===id);
-  if(!b || !b.data) return;
-  if(!confirm(`Obnovit zálohu „${b.name}“? Aktuální výsledky budou nahrazeny výsledky ze zálohy.`)) return;
-  state.t1.schedule = (b.data.schedule||[]).map(m=>({...m}));
-  state.t1.playoff = b.data.playoff ? JSON.parse(JSON.stringify(b.data.playoff)) : null;
-  state.t2.log = (b.data.panakLog||[]).map(l=>JSON.parse(JSON.stringify(l)));
-  renderAll();
-  await writeState(); // obnova se zapíše ihned do Supabase
-  alert('Záloha obnovena. 🌀');
-}
-async function deleteBackup(id){
-  const b = state.backups.find(x=>x.id===id);
-  if(!b) return;
-  if(!confirm(`Opravdu smazat zálohu „${b.name}“? Tohle nejde vrátit.`)) return;
-  state.backups = state.backups.filter(x=>x.id!==id);
-  renderBackups();
-  await writeState(); // smazání zálohy se zapíše ihned do Supabase
-}
-async function resetResults(){
-  const hasResults = state.t1.schedule.some(m=>m.winner) ||
-    !!(state.t1.playoff && state.t1.playoff.rounds && state.t1.playoff.rounds.some(r=>r.some(m=>m.winner))) ||
-    state.t2.log.length>0;
-  if(!hasResults){ alert('Není co vynulovat — zatím nejsou zapsané žádné výsledky.'); return; }
-  const label = prompt('Nejdřív vytvoříme zálohu. Zadej její název:', 'Před resetem ' + new Date().toLocaleString('cs-CZ'));
-  if(label===null) return;
-  await makeBackup(label.trim() || ('Před resetem ' + new Date().toLocaleString('cs-CZ')));
-  state.t1.schedule.forEach(m=>m.winner=null);
-  state.t1.playoff = null;
-  state.t2.log = [];
-  renderAll();
-  await writeState(); // reset + záloha jsou oba ihned uložené
-  alert('Výsledky jsou vynulované. Záloha zůstala uložená v Supabase. 🔥');
-}
-function renderBackups(){
-  const el = document.getElementById('backupList');
-  if(!el) return;
-  const countEl = document.getElementById('backupCount');
-  if(countEl) countEl.textContent = `${state.backups.length} ${state.backups.length===1?'záloha':'zálohy'}`;
-  if(!state.backups.length){
-    el.innerHTML = '<div class="empty">Zatím žádné zálohy. Klikni na „Vytvořit zálohu“ a uložíme aktuální výsledky. 💾</div>';
-    return;
-  }
-  el.innerHTML = state.backups.map(b=>`
-    <div class="backup-item">
-      <div class="backup-meta">
-        <div class="backup-name">💾 ${esc(b.name)}</div>
-        <div class="backup-date">${new Date(b.createdAt).toLocaleString('cs-CZ')} · výsledky + pavouk + Panák-Beyblade</div>
-      </div>
-      <div class="backup-buttons">
-        <button class="btn small ice" data-restore="${b.id}">↩️ Obnovit</button>
-        <button class="btn small danger" data-delete-backup="${b.id}">🗑️ Smazat</button>
-      </div>
-    </div>`).join('');
-  el.querySelectorAll('[data-restore]').forEach(btn=>btn.addEventListener('click',()=>restoreBackup(btn.dataset.restore)));
-  el.querySelectorAll('[data-delete-backup]').forEach(btn=>btn.addEventListener('click',()=>deleteBackup(btn.dataset.deleteBackup)));
-}
-
-document.getElementById('backupBtn').addEventListener('click',async ()=>{
-  const label = prompt('Název zálohy:', 'Záloha ' + new Date().toLocaleString('cs-CZ'));
-  if(label===null) return;
-  await makeBackup(label.trim() || ('Záloha ' + new Date().toLocaleString('cs-CZ')));
-  alert('Výsledky jsou bezpečně uložené v Supabase. 💾');
-});
-document.getElementById('resetBtn').addEventListener('click',resetResults);
-
-/* ---------------- tabs ---------------- */
-document.querySelectorAll('nav.tabs button').forEach(btn=>{
-  btn.addEventListener('click', ()=>{
-    document.querySelectorAll('nav.tabs button').forEach(b=>b.classList.remove('active'));
-    btn.classList.add('active');
-    document.querySelectorAll('.tab-content').forEach(s=>s.classList.add('hidden'));
-    document.getElementById('tab-'+btn.dataset.tab).classList.remove('hidden');
-    if(btn.dataset.tab==='stats') renderStats();
-    if(btn.dataset.tab==='t2') renderT2();
-    if(btn.dataset.tab==='manage') renderBackups();
-  });
-});
-
-/* ---------------- snow ---------------- */
-(function makeSnow(){
-  const wrap = document.getElementById('snowWrap');
-  const chars = ['❄','❅','❆'];
-  for(let i=0;i<18;i++){
-    const f = document.createElement('div');
-    f.className='flake';
-    f.textContent = chars[i%3];
-    f.style.left = (Math.random()*100)+'%';
-    f.style.fontSize = (10+Math.random()*16)+'px';
-    f.style.animationDuration = (4+Math.random()*5)+'s';
-    f.style.animationDelay = (Math.random()*5)+'s';
-    wrap.appendChild(f);
+  const lights=document.getElementById('lights');
+  const cols=['#ffd27a','#ff7a7a','#a8d8c0','#f4a6b8','#7ad0ff'];
+  for(let i=0;i<22;i++){
+    const b=document.createElement('span');
+    b.style.setProperty('--c',cols[i%cols.length]);
+    b.style.animationDelay=(-Math.random()*2.4)+'s';
+    lights.appendChild(b);
   }
 })();
 
-/* ---------------- players ---------------- */
-function verifyOwner(p, action){
-  if(!p) return false;
-  if(!p.pin){
-    const created = prompt(`Ochrana pro ${p.name} ještě není nastavená. Vymysli 4místný PIN:`);
-    if(!/^\d{4}$/.test(created||'')){ alert('PIN musí mít přesně 4 čísla.'); return false; }
-    p.pin = created; save();
-    alert('PIN nastaven. Zapamatuj si ho — bez něj nepůjde Beyblade upravovat.');
-    return true;
-  }
-  const entered = prompt(`PIN pro ${p.name} — ${action}:`);
-  if(entered !== p.pin){ alert('Špatný PIN. Tohle je cizí Beyblade. 😈'); return false; }
-  return true;
+/* ---------------- navigation ---------------- */
+const hub=document.getElementById('view-hub');
+const pen=document.getElementById('view-penalty');
+function route(){
+  const isPen=location.hash==='#trestnej';
+  hub.hidden=isPen; pen.hidden=!isPen;
+  window.scrollTo(0,0);
+  if(isPen) newTicket();
 }
-function renderPlayers(){
-  const grid = document.getElementById('playerGrid');
-  if(state.players.length===0){
-    grid.innerHTML = '<div class="empty">Zatím žádní bojovníci. Přidej první Starou Pušku dole! 🌀</div>';
-    return;
-  }
-  grid.innerHTML = state.players.map(p=>`
-    <div class="player-card">
-      <button class="del" data-del="${p.id}" title="Smazat hráče (vyžaduje PIN)">×</button>
-      ${p.photo ? `<img class="player-photo" src="${p.photo}">` : `<div class="player-photo placeholder">🌀</div>`}
-      <div class="pname">${esc(p.name)}</div>
-      ${p.blade ? `<div class="blade-badge"><span class="blade-mini">🌀</span>${esc(p.blade)}</div>` : `<div class="blade-badge"><span class="blade-mini">🌀</span>BEYBLADE BEZE JMÉNA</div>`}
-      <label class="up">⚡ Změnit svůj Beyblade
-        <input type="file" accept="image/*" data-photo="${p.id}" style="display:none">
-      </label>
-      <span class="protect">🔒 CHRÁNĚNO PINEM</span>
-    </div>
-  `).join('');
-  grid.querySelectorAll('[data-del]').forEach(b=>b.addEventListener('click', ()=>{
-    const p = player(b.dataset.del);
-    if(!p || !verifyOwner(p,'smazání hráče')) return;
-    if(confirm(`Opravdu smazat ${p.name} z Arény?`)){
-      state.players = state.players.filter(x=>x.id!==p.id);
-      save(); renderAll();
-    }
-  }));
-  grid.querySelectorAll('[data-photo]').forEach(inp=>inp.addEventListener('change', e=>{
-    const file = e.target.files[0];
-    if(!file) return;
-    const p = player(inp.dataset.photo);
-    if(!p || !verifyOwner(p,'změna fotky Beyblade')) { inp.value=''; return; }
-    const reader = new FileReader();
-    reader.onload = ev=>{
-      const img = new Image();
-      img.onload = ()=>{
-        const size = 220;
-        const c = document.createElement('canvas'); c.width=size; c.height=size;
-        const ctx = c.getContext('2d');
-        const scale = Math.max(size/img.width, size/img.height);
-        const w = img.width*scale, h = img.height*scale;
-        ctx.drawImage(img, (size-w)/2, (size-h)/2, w, h);
-        p.photo = c.toDataURL('image/jpeg', .82);
-        save(); renderAll();
-      };
-      img.src = ev.target.result;
-    };
-    reader.readAsDataURL(file);
-  }));
-}
-document.getElementById('addPlayerBtn').addEventListener('click', addPlayer);
-document.getElementById('newPlayerName').addEventListener('keydown', e=>{ if(e.key==='Enter') addPlayer(); });
-document.getElementById('newPlayerBlade').addEventListener('keydown', e=>{ if(e.key==='Enter') addPlayer(); });
-document.getElementById('newPlayerPin').addEventListener('keydown', e=>{ if(e.key==='Enter') addPlayer(); });
-function addPlayer(){
-  const inp = document.getElementById('newPlayerName');
-  const bladeInp = document.getElementById('newPlayerBlade');
-  const name = inp.value.trim();
-  const blade = bladeInp.value.trim();
-  const pin = document.getElementById('newPlayerPin').value.trim();
-  if(!name) return;
-  if(!/^\d{4}$/.test(pin)){ alert('Nastav prosím přesně 4místný PIN.'); return; }
-  if(state.players.some(p=>p.name.toLowerCase()===name.toLowerCase())){ alert('Tohle jméno už je v aréně zabrané.'); return; }
-  state.players.push({ id:uid(), name, blade, photo:null, pin });
-  inp.value=''; bladeInp.value=''; document.getElementById('newPlayerPin').value='';
-  save(); renderAll();
-}
+document.getElementById('goPenalty').addEventListener('click',()=>{location.hash='#trestnej';});
+document.getElementById('backBtn').addEventListener('click',()=>{location.hash='';history.replaceState(null,'',location.pathname);route();});
+window.addEventListener('hashchange',route);
 
-/* ---------------- tournament 1: round robin ---------------- */
-function circleMethodPairs(ids){
-  let arr = ids.slice();
-  if(arr.length%2!==0) arr.push(null);
-  const n = arr.length;
-  const all = [];
-  for(let r=0;r<n-1;r++){
-    for(let i=0;i<n/2;i++){
-      const a = arr[i], b = arr[n-1-i];
-      if(a!==null && b!==null) all.push([a,b]);
-    }
-    const fixed = arr[0];
-    const rest = arr.slice(1);
-    rest.unshift(rest.pop());
-    arr = [fixed, ...rest];
-  }
-  return all;
-}
-function greedyOrder(pairs){
-  let remaining = pairs.slice();
-  const schedule = [];
-  const recent = [];
-  while(remaining.length){
-    let bestIdx=0, bestScore=Infinity;
-    for(let i=0;i<remaining.length;i++){
-      const [a,b]=remaining[i];
-      let score=0;
-      if(recent[recent.length-1] && (recent[recent.length-1].includes(a)||recent[recent.length-1].includes(b))) score+=100;
-      if(recent[recent.length-2] && (recent[recent.length-2].includes(a)||recent[recent.length-2].includes(b))) score+=10;
-      if(score<bestScore){ bestScore=score; bestIdx=i; }
-    }
-    const chosen = remaining.splice(bestIdx,1)[0];
-    schedule.push(chosen);
-    recent.push(chosen);
-    if(recent.length>2) recent.shift();
-  }
-  return schedule;
-}
-function genRoundRobin(){
-  if(state.players.length<3){ alert('Přidej aspoň 3 hráče.'); return; }
-  const pairs = circleMethodPairs(state.players.map(p=>p.id));
-  const ordered = greedyOrder(pairs);
-  state.t1.schedule = ordered.map(([a,b])=>({ id:uid(), a, b, winner:null }));
-  state.t1.playoff = null;
-  save(); renderT1();
-}
-function renderT1(){
-  const controls = document.getElementById('rrControls');
-  controls.innerHTML = `<button class="btn" id="genRRBtn">${state.t1.schedule.length? '🔄 Přegenerovat rozpis' : '🎲 Vygenerovat rozpis'}</button>`;
-  document.getElementById('genRRBtn').addEventListener('click', ()=>{
-    if(state.t1.schedule.length && !confirm('Přegenerovat smaže dosavadní výsledky ligy. Pokračovat?')) return;
-    genRoundRobin();
-  });
+/* ---------------- prizes ---------------- */
+const PRIZES=[
+  {e:'🥃',t:'Dopij drink'},
+  {e:'😇',t:'Nemusíš nic!',s:'Dneska máš kliku'},
+  {e:'🥃',t:'Dej si frťana'},
+  {e:'🤝',t:'Frťan s kamarádem dle výběru'},
+  {e:'👉',t:'Urči, kdo si dá frťana'},
+  {e:'🫃',t:'Frťan z pupíku dle tvého výběru'},
+  {e:'🍺',t:'Dej 3 loky'},
+  {e:'🍻',t:'Dej 5 loků'},
+  {e:'🎯',t:'Frťan dle Pavlikova výběru'},
+  {e:'🕵️',t:'Dej 3 loky z cizího drinku'},
+  {e:'🦩',t:'Frťan na jedné noze'},
+  {e:'🥂',t:'Přípitek se všema u stolu'},
+  {e:'🎤',t:'Zazpívej sloku koledy'},
+  {e:'🙈',t:'Frťan se zavřenýma očima'},
+  {e:'🔄',t:'Vyměň drink se sousedem vpravo'},
+  {e:'🏋️',t:'Frťan a 5 dřepů'},
+  {e:'🙌',t:'Frťan bez použití rukou'},
+  {e:'🎀',t:'Frťan s mašlí — připni ji komukoli'}
+];
+document.getElementById('prizeList').innerHTML=PRIZES.map(p=>`<li>${p.t}</li>`).join('');
 
-  const mDiv = document.getElementById('rrMatches');
-  if(!state.t1.schedule.length){
-    mDiv.innerHTML = '<div class="empty">Zatím žádný rozpis. Přidej hráče a klikni na Vygenerovat.</div>';
-  } else {
-    mDiv.innerHTML = state.t1.schedule.map((m,i)=>{
-      const pa = player(m.a), pb = player(m.b);
-      if(!pa||!pb) return '';
-      return `
-      <div class="match">
-        <span style="color:var(--text-dim);font-size:11px;width:22px;">#${i+1}</span>
-        <span class="mp">${pa.photo?`<img src="${pa.photo}">`:''}${esc(pa.name)}</span>
-        <span class="vs">VS</span>
-        <span class="mp" style="justify-content:flex-end;text-align:right;">${esc(pb.name)}${pb.photo?`<img src="${pb.photo}">`:''}</span>
-        <button class="pick ${m.winner===m.a?'won':''}" data-m="${m.id}" data-w="${m.a}">${esc(pa.name)}</button>
-        <button class="pick ${m.winner===m.b?'won':''}" data-m="${m.id}" data-w="${m.b}">${esc(pb.name)}</button>
-      </div>`;
-    }).join('');
-    mDiv.querySelectorAll('.pick').forEach(b=>b.addEventListener('click', ()=>{
-      const m = state.t1.schedule.find(x=>x.id===b.dataset.m);
-      m.winner = m.winner===b.dataset.w ? null : b.dataset.w;
-      save(); renderT1();
-    }));
-  }
-  renderStandings();
-  renderBracket();
-}
-function computeStandings(){
-  const stats = {};
-  state.players.forEach(p=> stats[p.id] = {id:p.id, name:p.name, photo:p.photo, w:0, l:0, played:0});
-  state.t1.schedule.forEach(m=>{
-    if(!stats[m.a] || !stats[m.b]) return;
-    if(m.winner){
-      stats[m.a].played++; stats[m.b].played++;
-      const loser = m.winner===m.a ? m.b : m.a;
-      stats[m.winner].w++; stats[loser].l++;
-    }
-  });
-  return Object.values(stats).sort((a,b)=> b.w-a.w || a.l-b.l || a.name.localeCompare(b.name));
-}
-function renderStandings(){
-  const el = document.getElementById('rrStandings');
-  const standings = computeStandings();
-  if(!state.players.length){ el.innerHTML='<div class="empty">Žádní hráči.</div>'; return; }
-  el.innerHTML = `<table class="stats"><thead><tr><th>#</th><th>Hráč</th><th>V</th><th>P</th><th>Zápasy</th></tr></thead><tbody>
-    ${standings.map((s,i)=>`<tr><td>${i+1}</td><td>${s.photo?`<img src="${s.photo}">`:''}${esc(s.name)}</td><td>${s.w}</td><td>${s.l}</td><td>${s.played}</td></tr>`).join('')}
-  </tbody></table>`;
-}
+const COMMENTS=[
+  [0,'Škrábej. Nikdo tě nesoudí. (Všichni tě soudí.)'],
+  [0.04,'Jo, takhle. Jemně, ale odhodlaně.'],
+  [0.12,'Jemněji, není to tvoje ex.'],
+  [0.22,'Nekoukej pod to ještě, drž se!'],
+  [0.32,'Už cítíš ten frťan v dálce?'],
+  [0.4,'Ještě chvilku… odvaha dorůstá!']
+];
+const GIVEUP=['Zbabělec! Trest se zdvojnásobuje.','Útěk? U Starých Pušek? Dvakrát!','Vzdát se jde, ale draho.'];
+const WIN_LINES=['Trest vykonej HNED. Všichni čekají.','Žádné vyjednávání. Rozhodl los.','Pavlík by řekl: „No tak, pij!“','Kdo odmítne, platí kolo.'];
 
-/* ---------------- bracket ---------------- */
-function roundLabel(size){
-  if(size>=16) return 'Osmifinále';
-  if(size===8) return 'Čtvrtfinále';
-  if(size===4) return 'Semifinále';
-  if(size===2) return 'Finále';
-  return 'Kolo';
-}
-function genBracket(){
-  const standings = computeStandings().filter(s=>s.played>0);
-  if(standings.length<2){ alert('Nejdřív odehrajte pár zápasů v lize, ať máme podle čeho seřadit pavouka.'); return; }
-  let size = 2;
-  while(size*2<=standings.length && size*2<=16) size*=2;
-  const seeds = standings.slice(0,size).map(s=>s.id);
-  // standard seeding order 1v8 2v7 etc for size 8, generalized
-  const order = seedOrder(size);
-  const firstRound = [];
-  for(let i=0;i<size/2;i++){
-    firstRound.push({ id:uid(), a:seeds[order[i*2]], b:seeds[order[i*2+1]], winner:null });
-  }
-  const rounds = [firstRound];
-  let cur = size/2;
-  while(cur>1){
-    cur/=2;
-    rounds.push(Array.from({length:cur},()=>({ id:uid(), a:null, b:null, winner:null })));
-  }
-  state.t1.playoff = { rounds };
-  save(); renderT1();
-}
-function seedOrder(size){
-  // simple bracket seeding: 1,size,2,size-1,...
-  let order=[1,2];
-  while(order.length<size){
-    const s = order.length*2;
-    const next=[];
-    order.forEach(v=> next.push(v, s+1-v));
-    order = next;
-  }
-  return order.map(v=>v-1);
-}
-function renderBracket(){
-  const controls = document.getElementById('bracketControls');
-  const standings = computeStandings().filter(s=>s.played>0);
-  controls.innerHTML = `<button class="btn gold" id="genBracketBtn" ${standings.length<2?'disabled':''}>${state.t1.playoff? '🔄 Přegenerovat pavouka' : '🕸️ Vytvořit pavouka z tabulky'}</button>`;
-  document.getElementById('genBracketBtn').addEventListener('click', ()=>{
-    if(state.t1.playoff && !confirm('Přegenerovat smaže dosavadní pavouka. Pokračovat?')) return;
-    genBracket();
-  });
-  const area = document.getElementById('bracketArea');
-  if(!state.t1.playoff){ area.innerHTML = '<div class="empty">Pavouk ještě nebyl vytvořen.</div>'; return; }
-  const rounds = state.t1.playoff.rounds;
-  area.innerHTML = `<div class="bracket">${rounds.map((round,ri)=>{
-    const size = round.length*2;
-    return `<div class="bracket-round"><div class="round-title">${roundLabel(size)}</div>${round.map(m=>{
-      const pa = m.a?player(m.a):null, pb = m.b?player(m.b):null;
-      return `<div class="bmatch">
-        <div class="bp ${m.winner && m.winner===m.a?'win':''}">${pa?esc(pa.name):'—'} ${pa?`<button data-m="${m.id}" data-w="${m.a}" data-r="${ri}">Vítěz</button>`:''}</div>
-        <div class="bp ${m.winner && m.winner===m.b?'win':''}">${pb?esc(pb.name):'—'} ${pb?`<button data-m="${m.id}" data-w="${m.b}" data-r="${ri}">Vítěz</button>`:''}</div>
-      </div>`;
-    }).join('')}</div>`;
-  }).join('')}</div>`;
-  area.querySelectorAll('button[data-m]').forEach(b=>b.addEventListener('click', ()=>{
-    const ri = +b.dataset.r;
-    const m = rounds[ri].find(x=>x.id===b.dataset.m);
-    m.winner = m.winner===b.dataset.w ? null : b.dataset.w;
-    // propagate to next round
-    if(rounds[ri+1]){
-      const slot = Math.floor(rounds[ri].indexOf(m)/2);
-      const next = rounds[ri+1][slot];
-      const key = rounds[ri].indexOf(m)%2===0 ? 'a' : 'b';
-      next[key] = m.winner;
-      // clear downstream if changed
-      for(let r=ri+2;r<rounds.length;r++) rounds[r].forEach(x=>{x.a=null;x.b=null;x.winner=null;});
-      rounds[ri+1].forEach(x=>{ if(x.a!==m.winner && x.a===null) {} });
-    }
-    save(); renderT1();
-  }));
-}
+/* ---------------- scratch card ---------------- */
+const area=document.getElementById('scratchArea');
+const canvas=document.getElementById('scratch');
+const ctx=canvas.getContext('2d',{willReadFrequently:true});
+let prize=null,revealed=false,drawing=false,last=null,lastCheck=0,dpr=1;
 
-/* ---------------- tournament 2 ---------------- */
-function renderT2(){
-  const tagsEl = document.getElementById('stakeTags');
-  tagsEl.innerHTML = state.t2.stakes.map((s,i)=>`<span class="tag">${esc(s)}<button data-i="${i}">×</button></span>`).join('') || '<span class="empty">Žádné sázky.</span>';
-  tagsEl.querySelectorAll('button').forEach(b=>b.addEventListener('click', ()=>{
-    state.t2.stakes.splice(+b.dataset.i,1); save(); renderT2();
-  }));
-
-  const pickers = document.getElementById('duelPickers');
-  if(state.players.length<2){
-    pickers.innerHTML = '<div class="empty">Potřebuješ aspoň 2 hráče.</div>';
-  } else {
-    const opts = state.players.map(p=>`<option value="${p.id}">${esc(p.name)}</option>`).join('');
-    pickers.innerHTML = `
-      <div style="display:flex;gap:10px;align-items:center;flex-wrap:wrap;margin-bottom:6px;">
-        <select id="duelA">${opts}</select>
-        <span class="vs">VS</span>
-        <select id="duelB">${opts}</select>
-        <button class="btn small ice" id="randomizeDuel">🔀 Náhodná dvojice</button>
-      </div>`;
-    document.getElementById('duelB').selectedIndex = Math.min(1, state.players.length-1);
-    document.getElementById('randomizeDuel').addEventListener('click', ()=>{
-      const idx = [...Array(state.players.length).keys()];
-      const a = idx.splice(Math.floor(Math.random()*idx.length),1)[0];
-      const b = idx[Math.floor(Math.random()*idx.length)];
-      document.getElementById('duelA').selectedIndex = a;
-      document.getElementById('duelB').selectedIndex = b;
-    });
+function paintFoil(){
+  const w=canvas.width/dpr,h=canvas.height/dpr;
+  ctx.globalCompositeOperation='source-over';
+  const g=ctx.createLinearGradient(0,0,w,h);
+  g.addColorStop(0,'#dfe3e8');g.addColorStop(.35,'#9aa0a8');g.addColorStop(.6,'#d6dae0');g.addColorStop(1,'#8b9098');
+  ctx.fillStyle=g;ctx.fillRect(0,0,w,h);
+  for(let i=0;i<900;i++){ // foil grain
+    ctx.fillStyle=Math.random()>.5?'rgba(255,255,255,.18)':'rgba(0,0,0,.10)';
+    ctx.fillRect(Math.random()*w,Math.random()*h,1.5,1.5);
   }
-
-  const log = document.getElementById('t2Log');
-  if(!state.t2.log.length){
-    log.innerHTML = '<div class="empty">Zatím žádné souboje.</div>';
-  } else {
-    log.innerHTML = state.t2.log.slice().reverse().map(l=>{
-      const pa=player(l.a), pb=player(l.b), w=player(l.winner);
-      if(!pa||!pb) return '';
-      const loserName = l.winner===l.a ? (pb?pb.name:'?') : (pa?pa.name:'?');
-      return `<div class="match"><span class="mp">${esc(pa.name)} vs ${esc(pb.name)}</span><span class="vs" style="flex:1;text-align:center;">${esc(l.stake)}</span><span style="font-size:12px;color:var(--green);">🏆 ${w?esc(w.name):'?'}</span><span style="font-size:11px;color:var(--text-dim);">🥃 ${esc(loserName)}</span></div>`;
-    }).join('');
+  ctx.save();ctx.globalAlpha=.16;ctx.fillStyle='#3a2310';ctx.font='24px sans-serif';
+  for(let y=14;y<h+20;y+=40){for(let x=((y/40)%2?0:20);x<w;x+=46){ctx.fillText('🍺',x,y);}}
+  ctx.restore();
+  ctx.textAlign='center';ctx.fillStyle='#2a1a0e';
+  ctx.font='800 28px Rubik, sans-serif';ctx.fillText('ŠKRÁBEJ, ZBABĚLČE!',w/2,h/2-6);
+  ctx.font='600 14px Rubik, sans-serif';ctx.fillStyle='#4a3520';
+  ctx.fillText('(nikdo se nedívá… všichni se dívají)',w/2,h/2+22);
+}
+function setupCanvas(){
+  const r=area.getBoundingClientRect();
+  dpr=Math.min(window.devicePixelRatio||1,2);
+  canvas.width=Math.max(1,r.width*dpr);canvas.height=Math.max(1,r.height*dpr);
+  ctx.setTransform(dpr,0,0,dpr,0,0);
+  paintFoil();
+}
+function setComment(t){document.getElementById('comment').textContent=t;}
+function setMeter(p){
+  const pct=Math.min(100,Math.round(p/.45*100));
+  document.getElementById('meterBar').style.width=pct+'%';
+  document.getElementById('meterPct').textContent=pct+' %';
+}
+function clearedFraction(){
+  const w=canvas.width,h=canvas.height;
+  const d=ctx.getImageData(0,0,w,h).data;
+  let clear=0,total=0;const step=8;
+  for(let y=0;y<h;y+=step){for(let x=0;x<w;x+=step){total++;if(d[(y*w+x)*4+3]<64)clear++;}}
+  return clear/total;
+}
+function newTicket(){
+  prize=PRIZES[Math.floor(Math.random()*PRIZES.length)];
+  revealed=false;drawing=false;last=null;
+  document.getElementById('prizeEmoji').textContent=prize.e;
+  document.getElementById('prizeText').textContent=prize.t;
+  document.getElementById('prizeSub').textContent='';
+  document.getElementById('prize').classList.remove('pop');
+  document.getElementById('stamp').hidden=true;
+  document.getElementById('ticketNo').textContent='Los č. '+String(Math.floor(Math.random()*900)+100);
+  document.getElementById('giveUpBtn').disabled=false;
+  canvas.classList.remove('gone');
+  setMeter(0);setComment(COMMENTS[0][1]);
+  const go=()=>setupCanvas();
+  (document.fonts&&document.fonts.ready)?document.fonts.ready.then(go):go();
+}
+function scratchTo(x,y){
+  ctx.globalCompositeOperation='destination-out';
+  ctx.lineWidth=46;ctx.lineCap='round';ctx.lineJoin='round';
+  ctx.beginPath();
+  if(last){ctx.moveTo(last.x,last.y);ctx.lineTo(x,y);}else{ctx.moveTo(x,y);ctx.lineTo(x+.1,y+.1);}
+  ctx.stroke();last={x,y};
+  const now=performance.now();
+  if(now-lastCheck>130){
+    lastCheck=now;
+    const p=clearedFraction();
+    setMeter(p);
+    let msg=COMMENTS[0][1];
+    COMMENTS.forEach(c=>{if(p>=c[0])msg=c[1];});
+    if(!revealed)setComment(msg);
+    if(p>=.45)reveal(false);
   }
 }
-document.getElementById('addStakeBtn').addEventListener('click', ()=>{
-  const inp = document.getElementById('newStake');
-  const v = inp.value.trim();
-  if(!v) return;
-  state.t2.stakes.push(v); inp.value=''; save(); renderT2();
+function pos(e){const r=canvas.getBoundingClientRect();return{x:e.clientX-r.left,y:e.clientY-r.top};}
+canvas.addEventListener('pointerdown',e=>{if(revealed)return;drawing=true;last=null;canvas.setPointerCapture(e.pointerId);const p=pos(e);scratchTo(p.x,p.y);});
+canvas.addEventListener('pointermove',e=>{if(!drawing||revealed)return;const p=pos(e);scratchTo(p.x,p.y);});
+['pointerup','pointercancel','pointerleave'].forEach(ev=>canvas.addEventListener(ev,()=>{drawing=false;last=null;}));
+
+function reveal(gaveUp){
+  if(revealed)return;
+  revealed=true;drawing=false;
+  setMeter(.45);
+  canvas.classList.add('gone');
+  document.getElementById('giveUpBtn').disabled=true;
+  const pz=document.getElementById('prize');
+  void pz.offsetWidth;pz.classList.add('pop');
+  if(gaveUp){
+    document.getElementById('stamp').hidden=false;
+    document.getElementById('prizeSub').textContent='a to celé dvakrát (cena za zbabělost)';
+    setComment(GIVEUP[Math.floor(Math.random()*GIVEUP.length)]);
+  }else{
+    document.getElementById('prizeSub').textContent='Tvůj trest';
+    setComment(WIN_LINES[Math.floor(Math.random()*WIN_LINES.length)]);
+  }
+  if(navigator.vibrate)navigator.vibrate([80,40,80]);
+  confetti();
+}
+document.getElementById('giveUpBtn').addEventListener('click',()=>{
+  if(revealed)return;
+  area.classList.remove('shake');void area.offsetWidth;area.classList.add('shake');
+  setTimeout(()=>reveal(true),450);
 });
-document.getElementById('newStake').addEventListener('keydown', e=>{ if(e.key==='Enter') document.getElementById('addStakeBtn').click(); });
+document.getElementById('newBtn').addEventListener('click',newTicket);
+window.addEventListener('resize',()=>{if(!pen.hidden&&!revealed)setupCanvas();});
 
-let spinning = false;
-document.getElementById('spinBtn').addEventListener('click', ()=>{
-  if(spinning) return;
-  if(state.players.length<2){ alert('Potřebuješ aspoň 2 hráče.'); return; }
-  if(!state.t2.stakes.length){ alert('Přidej aspoň jednu sázku.'); return; }
-  const a = document.getElementById('duelA').value;
-  const b = document.getElementById('duelB').value;
-  if(a===b){ alert('Vyber dva různé hráče.'); return; }
-  spinning = true;
-  const wheel = document.getElementById('wheel');
-  const wheelText = document.getElementById('wheelText');
-  const chosenIdx = Math.floor(Math.random()*state.t2.stakes.length);
-  const chosen = state.t2.stakes[chosenIdx];
-  const currentRotation = (parseInt(wheel.dataset.rot)||0);
-  const newRotation = currentRotation + 1080 + Math.floor(Math.random()*360);
-  wheel.dataset.rot = newRotation;
-  wheel.style.transform = `rotate(${newRotation}deg)`;
-  wheelText.textContent = '...';
-  document.getElementById('duelResult').innerHTML = '';
-  setTimeout(()=>{
-    wheelText.textContent = chosen;
-    const pa = player(a), pb = player(b);
-    document.getElementById('duelResult').innerHTML = `
-      <div style="text-align:center;margin-top:10px;">
-        <div style="margin-bottom:8px;">Sázka: <b style="color:var(--gold)">${esc(chosen)}</b></div>
-        <button class="btn green small" id="winA">${esc(pa.name)} vyhrál</button>
-        <button class="btn green small" id="winB">${esc(pb.name)} vyhrál</button>
-      </div>`;
-    document.getElementById('winA').addEventListener('click', ()=> recordDuel(a,b,chosen,a));
-    document.getElementById('winB').addEventListener('click', ()=> recordDuel(a,b,chosen,b));
-    spinning = false;
-  }, 3200);
-});
-function recordDuel(a,b,stake,winner){
-  state.t2.log.push({ id:uid(), a, b, stake, winner });
-  save(); renderT2();
-  document.getElementById('duelResult').innerHTML = '<div style="text-align:center;color:var(--green);font-size:13px;">Zaznamenáno! 🎄</div>';
-}
-
-/* ---------------- stats ---------------- */
-function collectAllBattles(){
-  // returns array of {winner, loser, source} across liga, pavouk and panák-beyblade
-  const battles = [];
-  state.t1.schedule.forEach(m=>{
-    if(m.winner){ battles.push({ winner:m.winner, loser: m.winner===m.a?m.b:m.a, source:'liga' }); }
-  });
-  if(state.t1.playoff){
-    state.t1.playoff.rounds.forEach(round=> round.forEach(m=>{
-      if(m.winner && m.a && m.b){ battles.push({ winner:m.winner, loser: m.winner===m.a?m.b:m.a, source:'pavouk' }); }
-    }));
+function confetti(){
+  const em=['🎄','🍺','🥃','❄️','⭐','🎉','🎀','🥂'];
+  for(let i=0;i<42;i++){
+    const c=document.createElement('span');
+    c.className='confetto';
+    c.textContent=em[Math.floor(Math.random()*em.length)];
+    c.style.left=(Math.random()*100)+'vw';
+    c.style.fontSize=(16+Math.random()*20)+'px';
+    c.style.setProperty('--d',(2.2+Math.random()*2.2)+'s');
+    c.style.setProperty('--r',(Math.random()*720-360)+'deg');
+    c.style.animationDelay=(Math.random()*.6)+'s';
+    document.body.appendChild(c);
+    setTimeout(()=>c.remove(),5500);
   }
-  state.t2.log.forEach(l=>{
-    battles.push({ winner:l.winner, loser: l.winner===l.a?l.b:l.a, source:'panák' });
-  });
-  return battles;
-}
-function wrClass(pct){
-  if(pct===null) return 'h2h-none';
-  if(pct>=60) return 'h2h-hi';
-  if(pct>=40) return 'h2h-mid';
-  return 'h2h-lo';
-}
-function renderPodiumAndLeaderboard(){
-  const battles = collectAllBattles();
-  const rec = {};
-  state.players.forEach(p=> rec[p.id] = { id:p.id, name:p.name, blade:p.blade, photo:p.photo, w:0, l:0, tset:new Set() });
-  battles.forEach(b=>{
-    if(rec[b.winner]){ rec[b.winner].w++; rec[b.winner].tset.add(b.source); }
-    if(rec[b.loser]){ rec[b.loser].l++; rec[b.loser].tset.add(b.source); }
-  });
-  const list = Object.values(rec).map(r=>({
-    ...r, played:r.w+r.l, wr: (r.w+r.l)>0 ? Math.round(r.w/(r.w+r.l)*1000)/10 : null, tcount:r.tset.size
-  })).sort((a,b)=> b.w-a.w || (b.wr||0)-(a.wr||0) || a.name.localeCompare(b.name));
-
-  const podiumEl = document.getElementById('podium');
-  const top3 = list.filter(r=>r.played>0).slice(0,3);
-  if(top3.length<1){
-    podiumEl.innerHTML = '<div class="empty">Zatím nikdo nic neodehrál — pusťte se do zápasů!</div>';
-  } else {
-    const medals = ['🥇','🥈','🥉'];
-    const classes = ['p1','p2','p3'];
-    podiumEl.innerHTML = `<div class="podium">${top3.map((r,i)=>`
-      <div class="podium-card ${classes[i]}">
-        <div class="podium-medal">${medals[i]}</div>
-        <div class="podium-name">${esc(r.name)}</div>
-        ${r.blade?`<div class="podium-blade">${esc(r.blade)}</div>`:''}
-        <div class="podium-record">${r.w}V – ${r.l}P</div>
-        <div class="podium-wr ${wrClass(r.wr)}">${r.wr}% úspěšnost</div>
-      </div>`).join('')}</div>`;
-  }
-
-  const lbEl = document.getElementById('leaderboard');
-  if(!list.length){ lbEl.innerHTML = '<div class="empty">Žádní hráči.</div>'; return; }
-  const medals2 = ['🥇','🥈','🥉'];
-  lbEl.innerHTML = list.map((r,i)=>`
-    <div class="lb-row">
-      <div class="lb-rank ${i<3?'medal':''}">${i<3?medals2[i]:'#'+(i+1)}</div>
-      ${r.photo?`<img class="lb-photo" src="${r.photo}">`:'<div class="lb-photo" style="display:flex;align-items:center;justify-content:center;background:var(--bg2);">🌀</div>'}
-      <div class="lb-name"><div class="n">${esc(r.name)}</div>${r.blade?`<div class="b">${esc(r.blade)}</div>`:''}</div>
-      <div class="lb-stat"><div class="lab">Turnaje</div><div class="val">${r.tcount}</div></div>
-      <div class="lb-stat"><div class="lab">Bilance</div><div class="val">${r.w}V – ${r.l}P</div></div>
-      <div class="lb-wr ${wrClass(r.wr)}">${r.wr===null?'—':r.wr+'%'}</div>
-    </div>`).join('');
-}
-function renderH2H(){
-  const el = document.getElementById('h2hArea');
-  if(state.players.length<2){ el.innerHTML = '<div class="empty">Potřebuješ aspoň 2 hráče.</div>'; return; }
-  const battles = collectAllBattles();
-  const grid = {};
-  state.players.forEach(p=>{ grid[p.id] = {}; });
-  battles.forEach(b=>{
-    if(!grid[b.winner] || !grid[b.loser]) return;
-    grid[b.winner][b.loser] = grid[b.winner][b.loser] || {w:0,l:0};
-    grid[b.winner][b.loser].w++;
-    grid[b.loser][b.winner] = grid[b.loser][b.winner] || {w:0,l:0};
-    grid[b.loser][b.winner].l++;
-  });
-  const players = state.players;
-  el.innerHTML = `<table class="h2h">
-    <thead><tr><th class="corner">VS</th>${players.map(p=>`<th>
-      <span class="pn">${esc(p.name)}</span>${p.blade?`<span class="pb">${esc(p.blade)}</span>`:''}
-    </th>`).join('')}</tr></thead>
-    <tbody>
-      ${players.map(row=>`<tr>
-        <th class="rowhead"><span class="pn">${esc(row.name)}</span>${row.blade?`<span class="pb">${esc(row.blade)}</span>`:''}</th>
-        ${players.map(col=>{
-          if(row.id===col.id) return `<td class="h2h-cell h2h-diag">—</td>`;
-          const cell = grid[row.id] ? grid[row.id][col.id] : null;
-          if(!cell) return `<td class="h2h-cell h2h-none">—</td>`;
-          const total = cell.w+cell.l;
-          const pct = total>0 ? Math.round(cell.w/total*100) : null;
-          return `<td class="h2h-cell ${wrClass(pct)}"><span class="rec">${cell.w}-${cell.l}</span><span class="pct">${pct}%</span></td>`;
-        }).join('')}
-      </tr>`).join('')}
-    </tbody>
-  </table>`;
-}
-function renderStats(){
-  renderPodiumAndLeaderboard();
-  renderH2H();
-  const standings = computeStandings();
-  const t2Points = {}; const drinks = {};
-  state.players.forEach(p=>{ t2Points[p.id]=0; drinks[p.id]=0; });
-  state.t2.log.forEach(l=>{
-    if(t2Points[l.winner]!==undefined) t2Points[l.winner]++;
-    const loser = l.winner===l.a ? l.b : l.a;
-    if(drinks[loser]!==undefined) drinks[loser]++;
-  });
-  let playoffChampion = null, playoffFinalist=null;
-  if(state.t1.playoff){
-    const rounds = state.t1.playoff.rounds;
-    const final = rounds[rounds.length-1][0];
-    if(final && final.winner) playoffChampion = player(final.winner);
-    if(final){
-      const loserId = final.winner===final.a ? final.b : final.a;
-      if(loserId) playoffFinalist = player(loserId);
-    }
-  }
-  const mostDrinks = state.players.slice().sort((a,b)=>(drinks[b.id]||0)-(drinks[a.id]||0))[0];
-  const mostT2 = state.players.slice().sort((a,b)=>(t2Points[b.id]||0)-(t2Points[a.id]||0))[0];
-  const ligaLeader = standings[0];
-
-  const awardsEl = document.getElementById('awards');
-  const awards = [];
-  if(playoffChampion) awards.push(['🏆','Král Vánočního Pavouka', playoffChampion.name]);
-  if(ligaLeader && ligaLeader.played>0) awards.push(['🎖️','Král Ligy (nejvíc výher)', `${ligaLeader.name} (${ligaLeader.w}V)`]);
-  if(mostT2 && t2Points[mostT2.id]>0) awards.push(['🥃','Mistr panák-beyblade', `${mostT2.name} (${t2Points[mostT2.id]}b)`]);
-  if(mostDrinks && drinks[mostDrinks.id]>0) awards.push(['🎅','Nejvíc si "užil" (prohry v sázkách)', `${mostDrinks.name} (${drinks[mostDrinks.id]}×)`]);
-  awardsEl.innerHTML = awards.length ? awards.map(([m,t,n])=>`<div class="award"><span class="medal">${m}</span><div><b>${esc(t)}</b><br>${esc(n)}</div></div>`).join('') : '<div class="empty">Zatím žádná data — odehrajte pár zápasů.</div>';
-
-  const tbl = document.getElementById('statsTable');
-  if(!state.players.length){ tbl.innerHTML='<div class="empty">Žádní hráči.</div>'; return; }
-  tbl.innerHTML = `<table class="stats"><thead><tr><th>Hráč</th><th>Liga V-P</th><th>Panák body</th><th>Prohry v sázkách</th></tr></thead><tbody>
-    ${state.players.map(p=>{
-      const s = standings.find(x=>x.id===p.id);
-      return `<tr><td>${p.photo?`<img src="${p.photo}">`:''}${esc(p.name)}</td><td>${s?s.w:0}-${s?s.l:0}</td><td>${t2Points[p.id]||0}</td><td>${drinks[p.id]||0}</td></tr>`;
-    }).join('')}
-  </tbody></table>`;
 }
 
-function renderAll(){
-  renderPlayers();
-  renderT1();
-  renderT2();
-  renderBackups();
-}
-
-loadState();
-setInterval(refreshSharedState, 3000);
+route();
 </script>
 </body>
 </html>
