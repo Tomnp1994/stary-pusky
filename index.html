@@ -132,90 +132,6 @@ main{position:relative;z-index:1;max-width:900px;margin:0 auto;padding:6px 16px 
 @keyframes flame{0%,100%{transform:scale(1) rotate(-2deg)}50%{transform:scale(1.08) rotate(2deg)}}
 footer{text-align:center;font-family:'Caveat',cursive;font-size:20px;color:var(--chalk-dim);margin-top:14px;}
 
-/* ---------- penalty view ---------- */
-.back{
-  display:inline-flex;align-items:center;gap:8px;margin:2px 0 14px;
-  font-family:'Caveat',cursive;font-size:24px;font-weight:700;color:var(--sand);
-  background:none;border:2px dashed rgba(230,207,168,.5);border-radius:999px;padding:4px 16px;cursor:pointer;
-}
-.back:hover{color:#fff;border-color:var(--gold);}
-.pen-head{text-align:center;margin-bottom:12px;}
-.pen-head h2{
-  font-family:'Bungee',cursive;margin:0;font-size:clamp(32px,8vw,56px);color:#fff;line-height:1.05;
-  text-shadow:3px 3px 0 var(--red),0 0 24px rgba(210,58,70,.6);transform:rotate(-1.5deg);
-}
-.pen-head p{font-family:'Caveat',cursive;font-size:26px;color:var(--sand);margin:8px 0 0;}
-
-.ticket{
-  max-width:520px;margin:0 auto;padding:16px 16px 18px;border-radius:18px;
-  background:linear-gradient(160deg,#fff6e2,#f0dcb0);color:#3a2310;
-  border:3px solid #fff;box-shadow:0 18px 36px rgba(0,0,0,.55),0 0 40px rgba(255,200,100,.25);
-  position:relative;
-}
-.ticket:before,.ticket:after{ /* perforation notches */
-  content:"";position:absolute;top:56px;width:26px;height:26px;border-radius:50%;
-  background:#1b0f09;box-shadow:inset 0 0 8px rgba(0,0,0,.6);
-}
-.ticket:before{left:-14px}.ticket:after{right:-14px}
-.ticket-top{display:flex;justify-content:space-between;align-items:center;gap:8px;margin-bottom:12px;}
-.ticket-top b{font-family:'Bungee',cursive;font-size:15px;color:var(--red);letter-spacing:1px;}
-.ticket-top span{font-size:12px;font-weight:700;color:#7a5a38;}
-
-.scratch-area{
-  position:relative;height:210px;border-radius:12px;overflow:hidden;
-  background:
-    radial-gradient(circle at 50% 40%,#2b3a37,#141b1a);
-  border:3px solid #3a2310;
-}
-.prize{
-  position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:6px;
-  padding:12px 16px;text-align:center;color:var(--chalk);
-}
-.prize .pe{font-size:56px;line-height:1;}
-.prize .pt{font-family:'Caveat',cursive;font-weight:700;font-size:clamp(30px,7vw,40px);line-height:1;color:var(--gold);text-shadow:0 0 14px rgba(255,200,100,.4);}
-.prize .ps{font-size:12px;color:var(--chalk-dim);text-transform:uppercase;letter-spacing:1.5px;font-weight:700;}
-.prize.pop{animation:pop .6s cubic-bezier(.2,1.6,.4,1);}
-@keyframes pop{0%{transform:scale(.4);opacity:0}100%{transform:scale(1);opacity:1}}
-#scratch{
-  position:absolute;inset:0;width:100%;height:100%;touch-action:none;
-  cursor:url("data:image/svg+xml;utf8,%3Csvg xmlns='http://www.w3.org/2000/svg' width='34' height='34'%3E%3Ctext y='26' font-size='26'%3E🪙%3C/text%3E%3C/svg%3E") 17 17,crosshair;
-  transition:opacity .7s ease;
-}
-#scratch.gone{opacity:0;pointer-events:none;}
-.scratch-area.shake{animation:shake .5s;}
-@keyframes shake{0%,100%{transform:translateX(0)}15%{transform:translateX(-10px) rotate(-1deg)}30%{transform:translateX(10px) rotate(1deg)}45%{transform:translateX(-8px)}60%{transform:translateX(8px)}75%{transform:translateX(-4px)}}
-.stamp{
-  position:absolute;right:10px;top:10px;padding:2px 10px;border:3px solid var(--red2);color:var(--red2);
-  font-family:'Bungee',cursive;font-size:22px;border-radius:8px;transform:rotate(10deg);background:rgba(0,0,0,.35);
-}
-
-.meter-wrap{margin-top:14px;}
-.meter-label{display:flex;justify-content:space-between;font-size:12px;font-weight:800;color:#7a5a38;text-transform:uppercase;letter-spacing:1px;margin-bottom:4px;}
-.meter{height:14px;border-radius:999px;background:#d7bd8c;border:2px solid #3a2310;overflow:hidden;}
-.meter i{display:block;height:100%;width:0;background:linear-gradient(90deg,var(--mint),var(--amber),var(--red2));transition:width .15s;}
-.comment{min-height:30px;margin-top:10px;text-align:center;font-family:'Caveat',cursive;font-size:25px;font-weight:700;color:#7d1620;line-height:1.1;}
-
-.ticket-actions{display:flex;gap:10px;margin-top:12px;}
-.btn{
-  flex:1;border:none;border-radius:12px;padding:12px 10px;font-family:'Rubik',sans-serif;font-weight:800;font-size:14px;cursor:pointer;color:#fff;
-  transition:transform .1s;
-}
-.btn:active{transform:translateY(2px);}
-.btn.new{background:linear-gradient(135deg,#2a8d6e,#17594a);box-shadow:0 4px 0 #0d3b30;}
-.btn.giveup{background:linear-gradient(135deg,#c22a38,#7d1620);box-shadow:0 4px 0 #4d0c14;}
-.btn:disabled{opacity:.4;cursor:not-allowed;}
-
-details.menu{
-  max-width:520px;margin:20px auto 0;padding:14px 18px;border-radius:12px;
-  background:linear-gradient(145deg,var(--board),var(--board2));border:3px solid #7a4a22;
-}
-details.menu summary{font-family:'Caveat',cursive;font-size:28px;font-weight:700;cursor:pointer;color:var(--chalk);}
-details.menu ul{margin:10px 0 0;padding-left:0;list-style:none;font-family:'Caveat',cursive;font-size:24px;color:var(--chalk);}
-details.menu li{padding:3px 0;border-bottom:1px dashed rgba(244,241,230,.18);}
-details.menu li:before{content:"✦ ";color:var(--gold);}
-
-.confetto{position:fixed;top:-40px;z-index:50;pointer-events:none;animation:drop var(--d) linear forwards;}
-@keyframes drop{to{transform:translateY(112vh) rotate(var(--r));}}
 </style>
 </head>
 <body>
@@ -236,12 +152,12 @@ details.menu li:before{content:"✦ ";color:var(--gold);}
     <div class="board">
       <div class="board-title">Dnešní menu<small>vyber si, na čem si pochutnáš</small></div>
       <div class="menu-grid">
-        <button class="plate plate-penalty" id="goPenalty">
+        <a class="plate plate-penalty" href="trestnej.html">
           <span class="tie">🎀</span>
           <span class="ico">🥃</span>
           <span class="t">Máš trestnej!</span>
           <span class="d">Škrábni los a uvidíš, co tě čeká</span>
-        </button>
+        </a>
         <a class="plate plate-arena" href="arena.html">
           <span class="tie">🎀</span>
           <span class="ico">🌀</span>
@@ -261,45 +177,10 @@ details.menu li:before{content:"✦ ";color:var(--gold);}
     <footer>Sestrojeno v tajné dílně Starých Pušek 🎄</footer>
   </section>
 
-  <!-- ===================== MÁŠ TRESTNEJ ===================== -->
-  <section id="view-penalty" hidden>
-    <button class="back" id="backBtn">← zpátky na menu</button>
-
-    <div class="pen-head">
-      <h2>MÁŠ<br>TRESTNEJ!</h2>
-      <p>Škrábej, ať se nezlobí barman.</p>
-    </div>
-
-    <div class="ticket">
-      <div class="ticket-top"><b>STÍRACÍ LOS · STARÉ PUŠKY</b><span id="ticketNo">Los č. 001</span></div>
-
-      <div class="scratch-area" id="scratchArea">
-        <div class="prize" id="prize">
-          <div class="pe" id="prizeEmoji">🥃</div>
-          <div class="pt" id="prizeText">…</div>
-          <div class="ps" id="prizeSub"></div>
-        </div>
-        <div class="stamp" id="stamp" hidden>×2</div>
-        <canvas id="scratch"></canvas>
-      </div>
-
-      <div class="meter-wrap">
-        <div class="meter-label"><span>Odvaha</span><span id="meterPct">0 %</span></div>
-        <div class="meter"><i id="meterBar"></i></div>
-      </div>
-      <div class="comment" id="comment" aria-live="polite"></div>
-
-      <div class="ticket-actions">
-        <button class="btn giveup" id="giveUpBtn">🏳️ Vzdát se</button>
-        <button class="btn new" id="newBtn">🎟️ Další los</button>
-      </div>
-    </div>
-
-  </section>
-
 </main>
 
 <script>
+
 /* ---------------- ambient ---------------- */
 (function(){
   const bokeh=document.getElementById('bokeh');
@@ -322,177 +203,6 @@ details.menu li:before{content:"✦ ";color:var(--gold);}
     lights.appendChild(b);
   }
 })();
-
-/* ---------------- navigation ---------------- */
-const hub=document.getElementById('view-hub');
-const pen=document.getElementById('view-penalty');
-function route(){
-  const isPen=location.hash==='#trestnej';
-  hub.hidden=isPen; pen.hidden=!isPen;
-  window.scrollTo(0,0);
-  if(isPen) newTicket();
-}
-document.getElementById('goPenalty').addEventListener('click',()=>{location.hash='#trestnej';});
-document.getElementById('backBtn').addEventListener('click',()=>{location.hash='';history.replaceState(null,'',location.pathname);route();});
-window.addEventListener('hashchange',route);
-
-/* ---------------- prizes ---------------- */
-const PRIZES=[
-  {e:'🥃',t:'Dopij drink'},
-  {e:'😇',t:'Nemusíš nic!',s:'Dneska máš kliku'},
-  {e:'🥃',t:'Dej si frťana'},
-  {e:'🤝',t:'Frťan s kamarádem dle výběru'},
-  {e:'👉',t:'Urči, kdo si dá frťana'},
-  {e:'🫃',t:'Frťan z pupíku dle tvého výběru'},
-  {e:'🍺',t:'Dej 3 loky'},
-  {e:'🍻',t:'Dej 5 loků'},
-  {e:'🎯',t:'Frťan dle Pavlikova výběru'},
-  {e:'🕵️',t:'Dej 3 loky z cizího drinku'},
-  {e:'🦩',t:'Frťan na jedné noze'},
-  {e:'🥂',t:'Přípitek se všema u stolu'},
-  {e:'🎤',t:'Zazpívej sloku koledy'},
-  {e:'🙈',t:'Frťan se zavřenýma očima'},
-  {e:'🔄',t:'Vyměň drink se sousedem vpravo'},
-  {e:'🏋️',t:'Frťan a 5 dřepů'},
-  {e:'🙌',t:'Frťan bez použití rukou'},
-  {e:'🎀',t:'Frťan s mašlí — připni ji komukoli'}
-];
-const COMMENTS=[
-  [0,'Škrábej. Nikdo tě nesoudí. (Všichni tě soudí.)'],
-  [0.04,'Jo, takhle. Jemně, ale odhodlaně.'],
-  [0.12,'Jemněji, není to tvoje ex.'],
-  [0.22,'Nekoukej pod to ještě, drž se!'],
-  [0.32,'Už cítíš ten frťan v dálce?'],
-  [0.4,'Ještě chvilku… odvaha dorůstá!']
-];
-const GIVEUP=['Zbabělec! Trest se zdvojnásobuje.','Útěk? U Starých Pušek? Dvakrát!','Vzdát se jde, ale draho.'];
-const WIN_LINES=['Trest vykonej HNED. Všichni čekají.','Žádné vyjednávání. Rozhodl los.','Pavlík by řekl: „No tak, pij!“','Kdo odmítne, platí kolo.'];
-
-/* ---------------- scratch card ---------------- */
-const area=document.getElementById('scratchArea');
-const canvas=document.getElementById('scratch');
-const ctx=canvas.getContext('2d',{willReadFrequently:true});
-let prize=null,revealed=false,drawing=false,last=null,lastCheck=0,dpr=1;
-
-function paintFoil(){
-  const w=canvas.width/dpr,h=canvas.height/dpr;
-  ctx.globalCompositeOperation='source-over';
-  const g=ctx.createLinearGradient(0,0,w,h);
-  g.addColorStop(0,'#dfe3e8');g.addColorStop(.35,'#9aa0a8');g.addColorStop(.6,'#d6dae0');g.addColorStop(1,'#8b9098');
-  ctx.fillStyle=g;ctx.fillRect(0,0,w,h);
-  for(let i=0;i<900;i++){ // foil grain
-    ctx.fillStyle=Math.random()>.5?'rgba(255,255,255,.18)':'rgba(0,0,0,.10)';
-    ctx.fillRect(Math.random()*w,Math.random()*h,1.5,1.5);
-  }
-  ctx.save();ctx.globalAlpha=.16;ctx.fillStyle='#3a2310';ctx.font='24px sans-serif';
-  for(let y=14;y<h+20;y+=40){for(let x=((y/40)%2?0:20);x<w;x+=46){ctx.fillText('🍺',x,y);}}
-  ctx.restore();
-  ctx.textAlign='center';ctx.fillStyle='#2a1a0e';
-  ctx.font='800 28px Rubik, sans-serif';ctx.fillText('ŠKRÁBEJ, ZBABĚLČE!',w/2,h/2-6);
-  ctx.font='600 14px Rubik, sans-serif';ctx.fillStyle='#4a3520';
-  ctx.fillText('(nikdo se nedívá… všichni se dívají)',w/2,h/2+22);
-}
-function setupCanvas(){
-  const r=area.getBoundingClientRect();
-  dpr=Math.min(window.devicePixelRatio||1,2);
-  canvas.width=Math.max(1,r.width*dpr);canvas.height=Math.max(1,r.height*dpr);
-  ctx.setTransform(dpr,0,0,dpr,0,0);
-  paintFoil();
-}
-function setComment(t){document.getElementById('comment').textContent=t;}
-function setMeter(p){
-  const pct=Math.min(100,Math.round(p/.45*100));
-  document.getElementById('meterBar').style.width=pct+'%';
-  document.getElementById('meterPct').textContent=pct+' %';
-}
-function clearedFraction(){
-  const w=canvas.width,h=canvas.height;
-  const d=ctx.getImageData(0,0,w,h).data;
-  let clear=0,total=0;const step=8;
-  for(let y=0;y<h;y+=step){for(let x=0;x<w;x+=step){total++;if(d[(y*w+x)*4+3]<64)clear++;}}
-  return clear/total;
-}
-function newTicket(){
-  prize=PRIZES[Math.floor(Math.random()*PRIZES.length)];
-  revealed=false;drawing=false;last=null;
-  document.getElementById('prizeEmoji').textContent=prize.e;
-  document.getElementById('prizeText').textContent=prize.t;
-  document.getElementById('prizeSub').textContent='';
-  document.getElementById('prize').classList.remove('pop');
-  document.getElementById('stamp').hidden=true;
-  document.getElementById('ticketNo').textContent='Los č. '+String(Math.floor(Math.random()*900)+100);
-  document.getElementById('giveUpBtn').disabled=false;
-  canvas.classList.remove('gone');
-  setMeter(0);setComment(COMMENTS[0][1]);
-  const go=()=>setupCanvas();
-  (document.fonts&&document.fonts.ready)?document.fonts.ready.then(go):go();
-}
-function scratchTo(x,y){
-  ctx.globalCompositeOperation='destination-out';
-  ctx.lineWidth=46;ctx.lineCap='round';ctx.lineJoin='round';
-  ctx.beginPath();
-  if(last){ctx.moveTo(last.x,last.y);ctx.lineTo(x,y);}else{ctx.moveTo(x,y);ctx.lineTo(x+.1,y+.1);}
-  ctx.stroke();last={x,y};
-  const now=performance.now();
-  if(now-lastCheck>130){
-    lastCheck=now;
-    const p=clearedFraction();
-    setMeter(p);
-    let msg=COMMENTS[0][1];
-    COMMENTS.forEach(c=>{if(p>=c[0])msg=c[1];});
-    if(!revealed)setComment(msg);
-    if(p>=.45)reveal(false);
-  }
-}
-function pos(e){const r=canvas.getBoundingClientRect();return{x:e.clientX-r.left,y:e.clientY-r.top};}
-canvas.addEventListener('pointerdown',e=>{if(revealed)return;drawing=true;last=null;canvas.setPointerCapture(e.pointerId);const p=pos(e);scratchTo(p.x,p.y);});
-canvas.addEventListener('pointermove',e=>{if(!drawing||revealed)return;const p=pos(e);scratchTo(p.x,p.y);});
-['pointerup','pointercancel','pointerleave'].forEach(ev=>canvas.addEventListener(ev,()=>{drawing=false;last=null;}));
-
-function reveal(gaveUp){
-  if(revealed)return;
-  revealed=true;drawing=false;
-  setMeter(.45);
-  canvas.classList.add('gone');
-  document.getElementById('giveUpBtn').disabled=true;
-  const pz=document.getElementById('prize');
-  void pz.offsetWidth;pz.classList.add('pop');
-  if(gaveUp){
-    document.getElementById('stamp').hidden=false;
-    document.getElementById('prizeSub').textContent='a to celé dvakrát (cena za zbabělost)';
-    setComment(GIVEUP[Math.floor(Math.random()*GIVEUP.length)]);
-  }else{
-    document.getElementById('prizeSub').textContent='Tvůj trest';
-    setComment(WIN_LINES[Math.floor(Math.random()*WIN_LINES.length)]);
-  }
-  if(navigator.vibrate)navigator.vibrate([80,40,80]);
-  confetti();
-}
-document.getElementById('giveUpBtn').addEventListener('click',()=>{
-  if(revealed)return;
-  area.classList.remove('shake');void area.offsetWidth;area.classList.add('shake');
-  setTimeout(()=>reveal(true),450);
-});
-document.getElementById('newBtn').addEventListener('click',newTicket);
-window.addEventListener('resize',()=>{if(!pen.hidden&&!revealed)setupCanvas();});
-
-function confetti(){
-  const em=['🎄','🍺','🥃','❄️','⭐','🎉','🎀','🥂'];
-  for(let i=0;i<42;i++){
-    const c=document.createElement('span');
-    c.className='confetto';
-    c.textContent=em[Math.floor(Math.random()*em.length)];
-    c.style.left=(Math.random()*100)+'vw';
-    c.style.fontSize=(16+Math.random()*20)+'px';
-    c.style.setProperty('--d',(2.2+Math.random()*2.2)+'s');
-    c.style.setProperty('--r',(Math.random()*720-360)+'deg');
-    c.style.animationDelay=(Math.random()*.6)+'s';
-    document.body.appendChild(c);
-    setTimeout(()=>c.remove(),5500);
-  }
-}
-
-route();
 </script>
 </body>
 </html>
