@@ -175,6 +175,19 @@ details.menu li:before{content:"✦ ";color:var(--gold);}
 .log-empty{text-align:center;font-family:'Caveat',cursive;font-size:24px;color:#7a5a38;margin-top:12px;}
 .log-foot{display:flex;justify-content:space-between;align-items:center;gap:8px;margin-top:10px;font-size:12px;font-weight:700;color:#7a5a38;}
 .log-foot button{border:none;background:none;color:#7d1620;font-weight:800;font-size:12px;cursor:pointer;text-decoration:underline;}
+
+.log-list li{flex-wrap:wrap;}
+.log-list li.overturned .who,.log-list li.overturned .why{text-decoration:line-through;opacity:.5;}
+.appeal-btn{margin-top:4px;border:2px dashed #7a5a38;background:none;border-radius:999px;padding:3px 12px;font-family:'Caveat',cursive;font-size:20px;font-weight:700;color:#7a5a38;cursor:pointer;}
+.appeal-btn:hover{color:#7d1620;border-color:#7d1620;}
+.appeal{margin-top:8px;padding:10px;border-radius:10px;background:rgba(122,74,34,.12);border:2px solid #7a4a22;}
+.appeal-title{font-weight:800;font-size:12px;text-transform:uppercase;letter-spacing:1px;color:#7a5a38;margin-bottom:6px;}
+.appeal-votes{display:flex;gap:8px;}
+.vote{flex:1;border:2px solid #3a2310;border-radius:10px;padding:8px 6px;background:#fffaf0;font-family:'Rubik',sans-serif;font-weight:700;font-size:13px;color:#3a2310;cursor:pointer;line-height:1.2;}
+.vote.mine{background:#3a2310;color:#fff;}
+.vote:active{transform:translateY(1px);}
+.verdict{margin-top:8px;text-align:center;font-family:'Caveat',cursive;font-size:24px;font-weight:700;line-height:1.1;}
+.verdict.ok{color:#7d1620;}.verdict.no{color:#17594a;}.verdict.tie{color:#7a5a38;}
 </style>
 </head>
 <body>
@@ -512,15 +525,20 @@ drawWheel();
 
 /* ---------------- seznam trestů (Supabase) ---------------- */
 const SB_URL='https://yojtzodvbuhzcfdzvejp.supabase.co';
-const SB_KEY='sb_publishable_QC8b2a6ei9ZNkT3b5HtmNQ_mPd59qOl';
+const SB_KEY='SEM_VLOZ_PUBLISHABLE_KLIC';
 const SB_TABLE=SB_URL+'/rest/v1/trestnej';
 let logItems=[];
 const logEmpty=document.getElementById('logEmpty');
+let VOTER='';
+try{
+  VOTER=localStorage.getItem('stary-pusky-voter')||'';
+  if(!VOTER){VOTER=(window.crypto&&crypto.randomUUID)?crypto.randomUUID():String(Math.random()).slice(2)+Date.now();localStorage.setItem('stary-pusky-voter',VOTER);}
+}catch(e){VOTER=String(Math.random()).slice(2)+Date.now();}
 function sb(query,opts){
   opts=opts||{};
-  return fetch(SB_TABLE+query,{
+  return fetch(SB_URL+'/rest/v1/'+(opts.table||'trestnej')+query,{
     method:opts.method||'GET',
-    headers:{apikey:SB_KEY,Authorization:'Bearer '+SB_KEY,'Content-Type':'application/json',Prefer:'return=minimal'},
+    headers:{apikey:SB_KEY,Authorization:'Bearer '+SB_KEY,'Content-Type':'application/json',Prefer:opts.prefer||'return=minimal'},
     body:opts.body?JSON.stringify(opts.body):undefined
   }).then(r=>{
     if(!r.ok)throw new Error('HTTP '+r.status);
@@ -530,24 +548,59 @@ function sb(query,opts){
 function showErr(msg){logEmpty.textContent=msg;logEmpty.hidden=false;}
 function loadLog(){
   if(SB_KEY.startsWith('SEM_'))return showErr('Chybí klíč k databázi (SB_KEY).');
-  sb('?select=*&order=created_at.desc').then(rows=>{logItems=rows;renderLog();})
+  sb('?select=*,trestnej_votes(voter,vote)&order=created_at.desc').then(rows=>{logItems=rows;renderLog();})
     .catch(()=>showErr('Nepodařilo se načíst seznam. Zkontroluj připojení.'));
+}
+function tally(it){
+  const v=it.trestnej_votes||[];
+  const yes=v.filter(x=>x.vote).length,no=v.length-yes;
+  const mine=v.find(x=>x.voter===VOTER);
+  return {yes,no,mine:mine?mine.vote:null};
+}
+function castVote(it,val){
+  sb('?on_conflict=trestnej_id,voter',{method:'POST',table:'trestnej_votes',
+    prefer:'resolution=merge-duplicates,return=minimal',
+    body:{trestnej_id:it.id,voter:VOTER,vote:val}}).then(loadLog).catch(()=>showErr('Hlas se nepodařil uložit.'));
 }
 function renderLog(){
   const ul=document.getElementById('logList');ul.innerHTML='';
+  let open=0;
   logItems.forEach(it=>{
-    const li=document.createElement('li');if(it.done)li.className='done';
+    const t=tally(it);
+    const overturned=it.appeal&&t.no>t.yes;
+    if(!it.done&&!overturned)open++;
+    const li=document.createElement('li');
+    li.className=(it.done?'done ':'')+(overturned?'overturned':'');
     const cb=document.createElement('input');cb.type='checkbox';cb.checked=!!it.done;cb.title='Vypito';
     cb.addEventListener('change',()=>{sb('?id=eq.'+it.id,{method:'PATCH',body:{done:cb.checked}}).then(loadLog).catch(()=>showErr('Uložení se nepovedlo.'));});
     const txt=document.createElement('div');txt.className='txt';
     const who=document.createElement('div');who.className='who';who.textContent=it.who;
     txt.append(who);
     if(it.why){const why=document.createElement('div');why.className='why';why.textContent='za: '+it.why;txt.append(why);}
+    if(it.appeal){
+      const box=document.createElement('div');box.className='appeal';
+      const title=document.createElement('div');title.className='appeal-title';title.textContent='⚖️ Odvolání: je trest oprávněný?';
+      const row=document.createElement('div');row.className='appeal-votes';
+      const yes=document.createElement('button');yes.type='button';yes.className='vote'+(t.mine===true?' mine':'');
+      yes.textContent='👍 Oprávněný ('+t.yes+')';yes.addEventListener('click',()=>castVote(it,true));
+      const no=document.createElement('button');no.type='button';no.className='vote'+(t.mine===false?' mine':'');
+      no.textContent='👎 Neoprávněný ('+t.no+')';no.addEventListener('click',()=>castVote(it,false));
+      row.append(yes,no);
+      const ver=document.createElement('div');
+      if(t.yes+t.no===0){ver.className='verdict tie';ver.textContent='Čeká se na hlasy…';}
+      else if(t.yes>t.no){ver.className='verdict ok';ver.textContent='Trest platí! 🥃';}
+      else if(t.no>t.yes){ver.className='verdict no';ver.textContent='Odvolání uspělo, trest zrušen 🎉';}
+      else{ver.className='verdict tie';ver.textContent='Remíza, rozhodne barman 🤷';}
+      box.append(title,row,ver);txt.append(box);
+    }else if(!it.done){
+      const ap=document.createElement('button');ap.type='button';ap.className='appeal-btn';ap.textContent='⚖️ Odvolat se';
+      ap.addEventListener('click',()=>{sb('?id=eq.'+it.id,{method:'PATCH',body:{appeal:true}}).then(loadLog).catch(()=>showErr('Odvolání se nepovedlo.'));});
+      txt.append(ap);
+    }
     const del=document.createElement('button');del.className='del';del.textContent='🗑️';del.title='Smazat';
     del.addEventListener('click',()=>{sb('?id=eq.'+it.id,{method:'DELETE'}).then(loadLog).catch(()=>showErr('Smazání se nepovedlo.'));});
     li.append(cb,txt,del);ul.appendChild(li);
   });
-  const open=logItems.filter(i=>!i.done).length;
   document.getElementById('logCount').textContent=logItems.length?(open+' k vypití / '+logItems.length):'0 zápisů';
   logEmpty.textContent='Zatím nikdo. Dneska ještě všichni svatí…';
   logEmpty.hidden=logItems.length>0;
