@@ -1,0 +1,585 @@
+<!DOCTYPE html>
+<html lang="cs">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>STARÝ PUŠKY — Vánoční besídka</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Bungee&family=Caveat:wght@500;700&family=Rubik:wght@400;500;700;800&display=swap');
+
+:root{
+  --wood:#2a170d; --wood2:#4a2a15;
+  --board:#1d2624; --board2:#141b1a;
+  --chalk:#f4f1e6; --chalk-dim:#b9b6a8;
+  --gold:#ffc861; --amber:#ffa53d;
+  --red:#a8232f; --red2:#d23a46;
+  --pink:#f4a6b8; --mint:#a8d8c0; --sand:#e6cfa8;
+}
+*{box-sizing:border-box;}
+html,body{margin:0;padding:0;}
+body{
+  min-height:100vh;
+  font-family:'Rubik',sans-serif;
+  color:var(--chalk);
+  background:
+    radial-gradient(ellipse 60% 45% at 50% 0%, rgba(255,170,70,.28), transparent 70%),
+    radial-gradient(ellipse 40% 40% at 5% 60%, rgba(120,60,20,.35), transparent 70%),
+    radial-gradient(ellipse 40% 40% at 95% 55%, rgba(168,35,47,.22), transparent 70%),
+    linear-gradient(180deg,#140c08 0%,#1b0f09 60%,#2a170d 100%);
+  overflow-x:hidden;
+}
+
+/* ---------- ambient: bokeh + lights ---------- */
+.bokeh{position:fixed;inset:0;pointer-events:none;z-index:0;overflow:hidden;}
+.bokeh i{
+  position:absolute;border-radius:50%;
+  background:radial-gradient(circle,rgba(255,206,120,.55),rgba(255,170,70,.12) 60%,transparent 70%);
+  filter:blur(3px);opacity:.5;
+  animation:twinkle ease-in-out infinite;
+}
+@keyframes twinkle{0%,100%{opacity:.15;transform:scale(.85)}50%{opacity:.7;transform:scale(1.1)}}
+
+.lights{position:relative;z-index:2;display:flex;justify-content:space-between;padding:0 8px;height:46px;}
+.lights:before{
+  content:"";position:absolute;left:-2%;right:-2%;top:-14px;height:34px;
+  border-bottom:2px solid #3a2a1c;border-radius:0 0 50% 50% / 0 0 100% 100%;
+}
+.lights span{
+  position:relative;width:12px;height:18px;border-radius:50% 50% 50% 50%/40% 40% 60% 60%;
+  margin-top:10px;animation:bulb 2.4s ease-in-out infinite;
+  box-shadow:0 0 14px 4px var(--c);background:var(--c);
+}
+.lights span:nth-child(odd){margin-top:18px;}
+@keyframes bulb{0%,100%{opacity:1}50%{opacity:.35}}
+
+main{position:relative;z-index:1;max-width:900px;margin:0 auto;padding:6px 16px 40px;}
+[hidden]{display:none !important;}
+
+a.back{text-decoration:none;}
+/* ---------- penalty view ---------- */
+.back{
+  display:inline-flex;align-items:center;gap:8px;margin:2px 0 14px;
+  font-family:'Caveat',cursive;font-size:24px;font-weight:700;color:var(--sand);
+  background:none;border:2px dashed rgba(230,207,168,.5);border-radius:999px;padding:4px 16px;cursor:pointer;
+}
+.back:hover{color:#fff;border-color:var(--gold);}
+.pen-head{text-align:center;margin-bottom:12px;}
+.pen-head h2{
+  font-family:'Bungee',cursive;margin:0;font-size:clamp(32px,8vw,56px);color:#fff;line-height:1.05;
+  text-shadow:3px 3px 0 var(--red),0 0 24px rgba(210,58,70,.6);transform:rotate(-1.5deg);
+}
+.pen-head p{font-family:'Caveat',cursive;font-size:26px;color:var(--sand);margin:8px 0 0;}
+
+.ticket{
+  max-width:520px;margin:0 auto;padding:16px 16px 18px;border-radius:18px;
+  background:linear-gradient(160deg,#fff6e2,#f0dcb0);color:#3a2310;
+  border:3px solid #fff;box-shadow:0 18px 36px rgba(0,0,0,.55),0 0 40px rgba(255,200,100,.25);
+  position:relative;
+}
+.ticket:before,.ticket:after{ /* perforation notches */
+  content:"";position:absolute;top:56px;width:26px;height:26px;border-radius:50%;
+  background:#1b0f09;box-shadow:inset 0 0 8px rgba(0,0,0,.6);
+}
+.ticket:before{left:-14px}.ticket:after{right:-14px}
+.ticket-top{display:flex;justify-content:space-between;align-items:center;gap:8px;margin-bottom:12px;}
+.ticket-top b{font-family:'Bungee',cursive;font-size:15px;color:var(--red);letter-spacing:1px;}
+.ticket-top span{font-size:12px;font-weight:700;color:#7a5a38;}
+
+.scratch-area{
+  position:relative;height:210px;border-radius:12px;overflow:hidden;
+  background:
+    radial-gradient(circle at 50% 40%,#2b3a37,#141b1a);
+  border:3px solid #3a2310;
+}
+.prize{
+  position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:6px;
+  padding:12px 16px;text-align:center;color:var(--chalk);
+}
+.prize .pe{font-size:56px;line-height:1;}
+.prize .pt{font-family:'Caveat',cursive;font-weight:700;font-size:clamp(30px,7vw,40px);line-height:1;color:var(--gold);text-shadow:0 0 14px rgba(255,200,100,.4);}
+.prize .ps{font-size:12px;color:var(--chalk-dim);text-transform:uppercase;letter-spacing:1.5px;font-weight:700;}
+.prize.pop{animation:pop .6s cubic-bezier(.2,1.6,.4,1);}
+@keyframes pop{0%{transform:scale(.4);opacity:0}100%{transform:scale(1);opacity:1}}
+#scratch{
+  position:absolute;inset:0;width:100%;height:100%;touch-action:none;
+  cursor:url("data:image/svg+xml;utf8,%3Csvg xmlns='http://www.w3.org/2000/svg' width='34' height='34'%3E%3Ctext y='26' font-size='26'%3E🪙%3C/text%3E%3C/svg%3E") 17 17,crosshair;
+  transition:opacity .7s ease;
+}
+#scratch.gone{opacity:0;pointer-events:none;}
+.scratch-area.shake{animation:shake .5s;}
+@keyframes shake{0%,100%{transform:translateX(0)}15%{transform:translateX(-10px) rotate(-1deg)}30%{transform:translateX(10px) rotate(1deg)}45%{transform:translateX(-8px)}60%{transform:translateX(8px)}75%{transform:translateX(-4px)}}
+.stamp{
+  position:absolute;right:10px;top:10px;padding:2px 10px;border:3px solid var(--red2);color:var(--red2);
+  font-family:'Bungee',cursive;font-size:22px;border-radius:8px;transform:rotate(10deg);background:rgba(0,0,0,.35);
+}
+
+.meter-wrap{margin-top:14px;}
+.meter-label{display:flex;justify-content:space-between;font-size:12px;font-weight:800;color:#7a5a38;text-transform:uppercase;letter-spacing:1px;margin-bottom:4px;}
+.meter{height:14px;border-radius:999px;background:#d7bd8c;border:2px solid #3a2310;overflow:hidden;}
+.meter i{display:block;height:100%;width:0;background:linear-gradient(90deg,var(--mint),var(--amber),var(--red2));transition:width .15s;}
+.comment{min-height:30px;margin-top:10px;text-align:center;font-family:'Caveat',cursive;font-size:25px;font-weight:700;color:#7d1620;line-height:1.1;}
+
+.ticket-actions{display:flex;gap:10px;margin-top:12px;}
+.btn{
+  flex:1;border:none;border-radius:12px;padding:12px 10px;font-family:'Rubik',sans-serif;font-weight:800;font-size:14px;cursor:pointer;color:#fff;
+  transition:transform .1s;
+}
+.btn:active{transform:translateY(2px);}
+.btn.new{background:linear-gradient(135deg,#2a8d6e,#17594a);box-shadow:0 4px 0 #0d3b30;}
+.btn.giveup{background:linear-gradient(135deg,#c22a38,#7d1620);box-shadow:0 4px 0 #4d0c14;}
+.btn:disabled{opacity:.4;cursor:not-allowed;}
+
+details.menu{
+  max-width:520px;margin:20px auto 0;padding:14px 18px;border-radius:12px;
+  background:linear-gradient(145deg,var(--board),var(--board2));border:3px solid #7a4a22;
+}
+details.menu summary{font-family:'Caveat',cursive;font-size:28px;font-weight:700;cursor:pointer;color:var(--chalk);}
+details.menu ul{margin:10px 0 0;padding-left:0;list-style:none;font-family:'Caveat',cursive;font-size:24px;color:var(--chalk);}
+details.menu li{padding:3px 0;border-bottom:1px dashed rgba(244,241,230,.18);}
+details.menu li:before{content:"✦ ";color:var(--gold);}
+
+.confetto{position:fixed;top:-40px;z-index:50;pointer-events:none;animation:drop var(--d) linear forwards;}
+@keyframes drop{to{transform:translateY(112vh) rotate(var(--r));}}
+
+/* ---------- kolo štěstí + seznam ---------- */
+.ticket.plain:before,.ticket.plain:after{display:none;}
+.block{margin-top:26px;}
+.block-title{font-family:'Bungee',cursive;text-align:center;margin:0 0 10px;font-size:clamp(24px,6vw,36px);color:#fff;line-height:1.05;text-shadow:3px 3px 0 var(--red),0 0 20px rgba(210,58,70,.5);transform:rotate(-1deg);}
+.block-sub{font-family:'Caveat',cursive;text-align:center;font-size:24px;color:var(--sand);margin:0 0 14px;}
+.wheel-box{position:relative;width:min(100%,340px);aspect-ratio:1;margin:6px auto 4px;}
+.wheel-box canvas{width:100%;height:100%;display:block;border-radius:50%;
+  box-shadow:0 0 0 6px #3a2310,0 0 0 9px #c98c3e,0 10px 24px rgba(0,0,0,.45);
+  transition:transform 5s cubic-bezier(.15,.7,.1,1);}
+.wheel-pointer{position:absolute;left:50%;top:-12px;transform:translateX(-50%);width:0;height:0;z-index:2;
+  border-left:15px solid transparent;border-right:15px solid transparent;border-top:30px solid var(--red2);
+  filter:drop-shadow(0 3px 2px rgba(0,0,0,.5));}
+.wheel-hub{position:absolute;left:50%;top:50%;width:54px;height:54px;margin:-27px 0 0 -27px;border-radius:50%;z-index:2;
+  background:radial-gradient(circle at 35% 30%,#ffe3a0,#c98c3e);border:4px solid #3a2310;display:flex;align-items:center;justify-content:center;font-size:24px;}
+.wheel-result{min-height:70px;text-align:center;margin-top:12px;}
+.wheel-result .wr-e{font-size:40px;line-height:1;}
+.wheel-result .wr-t{font-family:'Caveat',cursive;font-weight:700;font-size:clamp(28px,7vw,36px);color:#7d1620;line-height:1.05;}
+.btn.log{background:linear-gradient(135deg,#c89b3c,#7a5518);box-shadow:0 4px 0 #4a3310;}
+
+.log-form{display:flex;flex-direction:column;gap:10px;}
+.field label{display:block;font-size:12px;font-weight:800;color:#7a5a38;text-transform:uppercase;letter-spacing:1px;margin-bottom:3px;}
+.field input{width:100%;padding:11px 12px;border-radius:10px;border:2px solid #3a2310;background:#fffaf0;color:#3a2310;font-family:'Rubik',sans-serif;font-size:16px;}
+.field input:focus{outline:3px solid rgba(210,58,70,.35);}
+.log-list{list-style:none;margin:14px 0 0;padding:0;}
+.log-list li{display:flex;align-items:center;gap:10px;padding:9px 4px;border-bottom:2px dashed rgba(58,35,16,.25);}
+.log-list .who{font-family:'Caveat',cursive;font-size:26px;font-weight:700;color:#7d1620;line-height:1;}
+.log-list .why{font-size:14px;color:#3a2310;line-height:1.25;}
+.log-list .txt{flex:1;min-width:0;overflow-wrap:anywhere;}
+.log-list li.done .who,.log-list li.done .why{text-decoration:line-through;opacity:.5;}
+.log-list input[type=checkbox]{width:24px;height:24px;accent-color:#2a8d6e;flex:none;}
+.log-list .del{border:none;background:none;font-size:20px;cursor:pointer;padding:4px;flex:none;}
+.log-empty{text-align:center;font-family:'Caveat',cursive;font-size:24px;color:#7a5a38;margin-top:12px;}
+.log-foot{display:flex;justify-content:space-between;align-items:center;gap:8px;margin-top:10px;font-size:12px;font-weight:700;color:#7a5a38;}
+.log-foot button{border:none;background:none;color:#7d1620;font-weight:800;font-size:12px;cursor:pointer;text-decoration:underline;}
+</style>
+</head>
+<body>
+
+<div class="bokeh" id="bokeh"></div>
+<div class="lights" id="lights"></div>
+
+<main>
+
+  <!-- ===================== MÁŠ TRESTNEJ ===================== -->
+  <section id="view-penalty">
+    <a class="back" href="index.html">← zpátky na menu</a>
+
+    <div class="pen-head">
+      <h2>MÁŠ<br>TRESTNEJ!</h2>
+      <p>Škrábej, ať se nezlobí barman.</p>
+    </div>
+
+    <div class="ticket">
+      <div class="ticket-top"><b>STÍRACÍ LOS · STARÉ PUŠKY</b><span id="ticketNo">Los č. 001</span></div>
+
+      <div class="scratch-area" id="scratchArea">
+        <div class="prize" id="prize">
+          <div class="pe" id="prizeEmoji">🥃</div>
+          <div class="pt" id="prizeText">…</div>
+          <div class="ps" id="prizeSub"></div>
+        </div>
+        <div class="stamp" id="stamp" hidden>×2</div>
+        <canvas id="scratch"></canvas>
+      </div>
+
+      <div class="meter-wrap">
+        <div class="meter-label"><span>Odvaha</span><span id="meterPct">0 %</span></div>
+        <div class="meter"><i id="meterBar"></i></div>
+      </div>
+      <div class="comment" id="comment" aria-live="polite"></div>
+
+      <div class="ticket-actions">
+        <button class="btn giveup" id="giveUpBtn">🏳️ Vzdát se</button>
+        <button class="btn new" id="newBtn">🎟️ Další los</button>
+      </div>
+    </div>
+
+    <!-- ===== KOLO ŠTĚSTÍ ===== -->
+    <div class="block">
+      <h3 class="block-title">KOLO<br>TRESTŮ</h3>
+      <p class="block-sub">Nechceš škrábat? Zatoč.</p>
+      <div class="ticket plain">
+        <div class="ticket-top"><b>KOLO ŠTĚSTÍ · STARÉ PUŠKY</b><span>Zatoč a pij</span></div>
+        <div class="wheel-box">
+          <div class="wheel-pointer"></div>
+          <canvas id="wheel" width="680" height="680"></canvas>
+          <div class="wheel-hub">🥃</div>
+        </div>
+        <div class="wheel-result" id="wheelResult" aria-live="polite"></div>
+        <div class="ticket-actions">
+          <button class="btn log" id="toLogBtn" disabled>✍️ Zapsat do seznamu</button>
+          <button class="btn giveup" id="spinBtn">🎡 Zatočit</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- ===== SEZNAM TRESTŮ ===== -->
+    <div class="block">
+      <h3 class="block-title">KDO<br>PIJE?</h3>
+      <p class="block-sub">Seznam trestných panáků na besídku</p>
+      <div class="ticket plain">
+        <div class="ticket-top"><b>KNIHA TRESTŮ</b><span id="logCount">0 zápisů</span></div>
+        <form class="log-form" id="logForm" autocomplete="off">
+          <div class="field"><label for="logWho">Kdo</label><input id="logWho" maxlength="40" placeholder="Např. Pavlík" required></div>
+          <div class="field"><label for="logWhy">Za co</label><input id="logWhy" maxlength="120" placeholder="Např. Přišel pozdě"></div>
+          <button class="btn giveup" type="submit">➕ Přidat do seznamu</button>
+        </form>
+        <ul class="log-list" id="logList"></ul>
+        <div class="log-empty" id="logEmpty">Zatím nikdo. Dneska ještě všichni svatí…</div>
+        <div class="log-foot"><span>Sdílený seznam – vidí ho všichni</span><button type="button" id="logClear">Smazat vše</button></div>
+      </div>
+    </div>
+
+  </section>
+
+</main>
+
+<script>
+
+/* ---------------- ambient ---------------- */
+(function(){
+  const bokeh=document.getElementById('bokeh');
+  for(let i=0;i<26;i++){
+    const el=document.createElement('i');
+    const s=24+Math.random()*90;
+    el.style.width=el.style.height=s+'px';
+    el.style.left=(Math.random()*100)+'%';
+    el.style.top=(Math.random()*100)+'%';
+    el.style.animationDuration=(3+Math.random()*5)+'s';
+    el.style.animationDelay=(-Math.random()*6)+'s';
+    bokeh.appendChild(el);
+  }
+  const lights=document.getElementById('lights');
+  const cols=['#ffd27a','#ff7a7a','#a8d8c0','#f4a6b8','#7ad0ff'];
+  for(let i=0;i<22;i++){
+    const b=document.createElement('span');
+    b.style.setProperty('--c',cols[i%cols.length]);
+    b.style.animationDelay=(-Math.random()*2.4)+'s';
+    lights.appendChild(b);
+  }
+})();
+
+/* ---------------- prizes ---------------- */
+const PRIZES=[
+  {e:'🥃',t:'Dopij drink'},
+  {e:'😇',t:'Nemusíš nic!',s:'Dneska máš kliku'},
+  {e:'🥃',t:'Dej si frťana'},
+  {e:'🤝',t:'Frťan s kamarádem dle výběru'},
+  {e:'👉',t:'Urči, kdo si dá frťana'},
+  {e:'🫃',t:'Frťan z pupíku dle tvého výběru'},
+  {e:'🍺',t:'Dej 3 loky'},
+  {e:'🍻',t:'Dej 5 loků'},
+  {e:'🎯',t:'Frťan dle Pavlikova výběru'},
+  {e:'🕵️',t:'Dej 3 loky z cizího drinku'},
+  {e:'🦩',t:'Frťan na jedné noze'},
+  {e:'🥂',t:'Přípitek se všema u stolu'},
+  {e:'🎤',t:'Zazpívej sloku koledy'},
+  {e:'🙈',t:'Frťan se zavřenýma očima'},
+  {e:'🔄',t:'Vyměň drink se sousedem vpravo'},
+  {e:'🏋️',t:'Frťan a 5 dřepů'},
+  {e:'🙌',t:'Frťan bez použití rukou'},
+  {e:'🎀',t:'Frťan s mašlí — připni ji komukoli'}
+];
+const COMMENTS=[
+  [0,'Škrábej. Nikdo tě nesoudí. (Všichni tě soudí.)'],
+  [0.04,'Jo, takhle. Jemně, ale odhodlaně.'],
+  [0.12,'Jemněji, není to tvoje ex.'],
+  [0.22,'Nekoukej pod to ještě, drž se!'],
+  [0.32,'Už cítíš ten frťan v dálce?'],
+  [0.4,'Ještě chvilku… odvaha dorůstá!']
+];
+const GIVEUP=['Zbabělec! Trest se zdvojnásobuje.','Útěk? U Starých Pušek? Dvakrát!','Vzdát se jde, ale draho.'];
+const WIN_LINES=['Trest vykonej HNED. Všichni čekají.','Žádné vyjednávání. Rozhodl los.','Pavlík by řekl: „No tak, pij!“','Kdo odmítne, platí kolo.'];
+
+/* ---------------- scratch card ---------------- */
+const area=document.getElementById('scratchArea');
+const canvas=document.getElementById('scratch');
+const ctx=canvas.getContext('2d',{willReadFrequently:true});
+let prize=null,revealed=false,drawing=false,last=null,lastCheck=0,dpr=1;
+
+function paintFoil(){
+  const w=canvas.width/dpr,h=canvas.height/dpr;
+  ctx.globalCompositeOperation='source-over';
+  const g=ctx.createLinearGradient(0,0,w,h);
+  g.addColorStop(0,'#dfe3e8');g.addColorStop(.35,'#9aa0a8');g.addColorStop(.6,'#d6dae0');g.addColorStop(1,'#8b9098');
+  ctx.fillStyle=g;ctx.fillRect(0,0,w,h);
+  for(let i=0;i<900;i++){ // foil grain
+    ctx.fillStyle=Math.random()>.5?'rgba(255,255,255,.18)':'rgba(0,0,0,.10)';
+    ctx.fillRect(Math.random()*w,Math.random()*h,1.5,1.5);
+  }
+  ctx.save();ctx.globalAlpha=.16;ctx.fillStyle='#3a2310';ctx.font='24px sans-serif';
+  for(let y=14;y<h+20;y+=40){for(let x=((y/40)%2?0:20);x<w;x+=46){ctx.fillText('🍺',x,y);}}
+  ctx.restore();
+  ctx.textAlign='center';ctx.fillStyle='#2a1a0e';
+  ctx.font='800 28px Rubik, sans-serif';ctx.fillText('ŠKRÁBEJ, ZBABĚLČE!',w/2,h/2-6);
+  ctx.font='600 14px Rubik, sans-serif';ctx.fillStyle='#4a3520';
+  ctx.fillText('(nikdo se nedívá… všichni se dívají)',w/2,h/2+22);
+}
+function setupCanvas(){
+  const r=area.getBoundingClientRect();
+  dpr=Math.min(window.devicePixelRatio||1,2);
+  canvas.width=Math.max(1,r.width*dpr);canvas.height=Math.max(1,r.height*dpr);
+  ctx.setTransform(dpr,0,0,dpr,0,0);
+  paintFoil();
+}
+function setComment(t){document.getElementById('comment').textContent=t;}
+function setMeter(p){
+  const pct=Math.min(100,Math.round(p/.45*100));
+  document.getElementById('meterBar').style.width=pct+'%';
+  document.getElementById('meterPct').textContent=pct+' %';
+}
+function clearedFraction(){
+  const w=canvas.width,h=canvas.height;
+  const d=ctx.getImageData(0,0,w,h).data;
+  let clear=0,total=0;const step=8;
+  for(let y=0;y<h;y+=step){for(let x=0;x<w;x+=step){total++;if(d[(y*w+x)*4+3]<64)clear++;}}
+  return clear/total;
+}
+function newTicket(){
+  prize=PRIZES[Math.floor(Math.random()*PRIZES.length)];
+  revealed=false;drawing=false;last=null;
+  document.getElementById('prizeEmoji').textContent=prize.e;
+  document.getElementById('prizeText').textContent=prize.t;
+  document.getElementById('prizeSub').textContent='';
+  document.getElementById('prize').classList.remove('pop');
+  document.getElementById('stamp').hidden=true;
+  document.getElementById('ticketNo').textContent='Los č. '+String(Math.floor(Math.random()*900)+100);
+  document.getElementById('giveUpBtn').disabled=false;
+  canvas.classList.remove('gone');
+  setMeter(0);setComment(COMMENTS[0][1]);
+  const go=()=>setupCanvas();
+  (document.fonts&&document.fonts.ready)?document.fonts.ready.then(go):go();
+}
+function scratchTo(x,y){
+  ctx.globalCompositeOperation='destination-out';
+  ctx.lineWidth=46;ctx.lineCap='round';ctx.lineJoin='round';
+  ctx.beginPath();
+  if(last){ctx.moveTo(last.x,last.y);ctx.lineTo(x,y);}else{ctx.moveTo(x,y);ctx.lineTo(x+.1,y+.1);}
+  ctx.stroke();last={x,y};
+  const now=performance.now();
+  if(now-lastCheck>130){
+    lastCheck=now;
+    const p=clearedFraction();
+    setMeter(p);
+    let msg=COMMENTS[0][1];
+    COMMENTS.forEach(c=>{if(p>=c[0])msg=c[1];});
+    if(!revealed)setComment(msg);
+    if(p>=.45)reveal(false);
+  }
+}
+function pos(e){const r=canvas.getBoundingClientRect();return{x:e.clientX-r.left,y:e.clientY-r.top};}
+canvas.addEventListener('pointerdown',e=>{if(revealed)return;drawing=true;last=null;canvas.setPointerCapture(e.pointerId);const p=pos(e);scratchTo(p.x,p.y);});
+canvas.addEventListener('pointermove',e=>{if(!drawing||revealed)return;const p=pos(e);scratchTo(p.x,p.y);});
+['pointerup','pointercancel','pointerleave'].forEach(ev=>canvas.addEventListener(ev,()=>{drawing=false;last=null;}));
+
+function reveal(gaveUp){
+  if(revealed)return;
+  revealed=true;drawing=false;
+  setMeter(.45);
+  canvas.classList.add('gone');
+  document.getElementById('giveUpBtn').disabled=true;
+  const pz=document.getElementById('prize');
+  void pz.offsetWidth;pz.classList.add('pop');
+  if(gaveUp){
+    document.getElementById('stamp').hidden=false;
+    document.getElementById('prizeSub').textContent='a to celé dvakrát (cena za zbabělost)';
+    setComment(GIVEUP[Math.floor(Math.random()*GIVEUP.length)]);
+  }else{
+    document.getElementById('prizeSub').textContent='Tvůj trest';
+    setComment(WIN_LINES[Math.floor(Math.random()*WIN_LINES.length)]);
+  }
+  if(navigator.vibrate)navigator.vibrate([80,40,80]);
+  confetti();
+}
+document.getElementById('giveUpBtn').addEventListener('click',()=>{
+  if(revealed)return;
+  area.classList.remove('shake');void area.offsetWidth;area.classList.add('shake');
+  setTimeout(()=>reveal(true),450);
+});
+document.getElementById('newBtn').addEventListener('click',newTicket);
+window.addEventListener('resize',()=>{if(!revealed)setupCanvas();});
+
+function confetti(){
+  const em=['🎄','🍺','🥃','❄️','⭐','🎉','🎀','🥂'];
+  for(let i=0;i<42;i++){
+    const c=document.createElement('span');
+    c.className='confetto';
+    c.textContent=em[Math.floor(Math.random()*em.length)];
+    c.style.left=(Math.random()*100)+'vw';
+    c.style.fontSize=(16+Math.random()*20)+'px';
+    c.style.setProperty('--d',(2.2+Math.random()*2.2)+'s');
+    c.style.setProperty('--r',(Math.random()*720-360)+'deg');
+    c.style.animationDelay=(Math.random()*.6)+'s';
+    document.body.appendChild(c);
+    setTimeout(()=>c.remove(),5500);
+  }
+}
+
+
+/* ---------------- kolo štěstí ---------------- */
+const WHEEL=[
+  {e:'🥃',s:'Frťan',t:'Dej si frťana'},
+  {e:'😇',s:'Nic! Kliku máš',t:'Nemusíš nic! Dneska máš kliku'},
+  {e:'🤝',s:'Frťan + kámoš',t:'Frťan s kamarádem dle výběru'},
+  {e:'👉',s:'Urči, kdo pije',t:'Urči, kdo si dá frťana'},
+  {e:'🍺',s:'3 loky',t:'Dej 3 loky'},
+  {e:'🍻',s:'5 loků',t:'Dej 5 loků'},
+  {e:'🕵️',s:'Cizí drink ×3',t:'Dej 3 loky z cizího drinku'},
+  {e:'🦩',s:'Na jedné noze',t:'Frťan na jedné noze'},
+  {e:'🎤',s:'Koleda!',t:'Zazpívej sloku koledy'},
+  {e:'🙈',s:'Poslepu',t:'Frťan se zavřenýma očima'},
+  {e:'🔄',s:'Výměna drinku',t:'Vyměň drink se sousedem vpravo'},
+  {e:'🏋️',s:'Frťan + dřepy',t:'Frťan a 5 dřepů'}
+];
+const wCanvas=document.getElementById('wheel');
+const wCtx=wCanvas.getContext('2d');
+const W_COLORS=['#c22a38','#c89b3c','#2a8d6e','#7a4a22'];
+let wRot=0,wSpinning=false,wPrize=null;
+function drawWheel(){
+  const R=170,n=WHEEL.length,seg=2*Math.PI/n;
+  wCtx.setTransform(2,0,0,2,0,0);
+  wCtx.clearRect(0,0,340,340);
+  wCtx.translate(170,170);
+  for(let i=0;i<n;i++){
+    const a0=-Math.PI/2+i*seg;
+    wCtx.beginPath();wCtx.moveTo(0,0);wCtx.arc(0,0,R,a0,a0+seg);wCtx.closePath();
+    wCtx.fillStyle=W_COLORS[i%W_COLORS.length];wCtx.fill();
+    wCtx.strokeStyle='rgba(255,255,255,.75)';wCtx.lineWidth=2;wCtx.stroke();
+    wCtx.save();wCtx.rotate(a0+seg/2);
+    wCtx.textBaseline='middle';
+    wCtx.font='24px sans-serif';wCtx.textAlign='center';wCtx.fillText(WHEEL[i].e,R-26,1);
+    wCtx.font='800 12px Rubik, sans-serif';wCtx.textAlign='right';
+    wCtx.fillStyle=(i%W_COLORS.length===1)?'#2a1a0e':'#fff';
+    wCtx.fillText(WHEEL[i].s,R-48,1);
+    wCtx.restore();
+  }
+  wCtx.setTransform(1,0,0,1,0,0);
+}
+function spinWheel(){
+  if(wSpinning)return;
+  wSpinning=true;
+  document.getElementById('spinBtn').disabled=true;
+  document.getElementById('toLogBtn').disabled=true;
+  document.getElementById('wheelResult').innerHTML='';
+  const n=WHEEL.length,seg=360/n;
+  const k=Math.floor(Math.random()*n);
+  const jitter=(Math.random()-.5)*seg*.7;
+  const target=(360-((k+.5)*seg+jitter))%360;
+  const cur=((wRot%360)+360)%360;
+  wRot+=360*5+((target-cur)+360)%360;
+  wPrize=WHEEL[k];
+  wCanvas.style.transform='rotate('+wRot+'deg)';
+}
+wCanvas.addEventListener('transitionend',()=>{
+  if(!wSpinning)return;
+  wSpinning=false;
+  document.getElementById('spinBtn').disabled=false;
+  document.getElementById('toLogBtn').disabled=false;
+  const box=document.getElementById('wheelResult');
+  box.innerHTML='';
+  const e=document.createElement('div');e.className='wr-e';e.textContent=wPrize.e;
+  const t=document.createElement('div');t.className='wr-t';t.textContent=wPrize.t;
+  box.append(e,t);
+  if(navigator.vibrate)navigator.vibrate([80,40,80]);
+  confetti();
+});
+document.getElementById('spinBtn').addEventListener('click',spinWheel);
+drawWheel();
+
+/* ---------------- seznam trestů (Supabase) ---------------- */
+const SB_URL='https://yojtzodvbuhzcfdzvejp.supabase.co';
+const SB_KEY='SEM_VLOZ_PUBLISHABLE_KLIC';
+const SB_TABLE=SB_URL+'/rest/v1/trestnej';
+let logItems=[];
+const logEmpty=document.getElementById('logEmpty');
+function sb(query,opts){
+  opts=opts||{};
+  return fetch(SB_TABLE+query,{
+    method:opts.method||'GET',
+    headers:{apikey:SB_KEY,Authorization:'Bearer '+SB_KEY,'Content-Type':'application/json',Prefer:'return=minimal'},
+    body:opts.body?JSON.stringify(opts.body):undefined
+  }).then(r=>{
+    if(!r.ok)throw new Error('HTTP '+r.status);
+    return (opts.method&&opts.method!=='GET')?null:r.json();
+  });
+}
+function showErr(msg){logEmpty.textContent=msg;logEmpty.hidden=false;}
+function loadLog(){
+  if(SB_KEY.startsWith('SEM_'))return showErr('Chybí klíč k databázi (SB_KEY).');
+  sb('?select=*&order=created_at.desc').then(rows=>{logItems=rows;renderLog();})
+    .catch(()=>showErr('Nepodařilo se načíst seznam. Zkontroluj připojení.'));
+}
+function renderLog(){
+  const ul=document.getElementById('logList');ul.innerHTML='';
+  logItems.forEach(it=>{
+    const li=document.createElement('li');if(it.done)li.className='done';
+    const cb=document.createElement('input');cb.type='checkbox';cb.checked=!!it.done;cb.title='Vypito';
+    cb.addEventListener('change',()=>{sb('?id=eq.'+it.id,{method:'PATCH',body:{done:cb.checked}}).then(loadLog).catch(()=>showErr('Uložení se nepovedlo.'));});
+    const txt=document.createElement('div');txt.className='txt';
+    const who=document.createElement('div');who.className='who';who.textContent=it.who;
+    txt.append(who);
+    if(it.why){const why=document.createElement('div');why.className='why';why.textContent='za: '+it.why;txt.append(why);}
+    const del=document.createElement('button');del.className='del';del.textContent='🗑️';del.title='Smazat';
+    del.addEventListener('click',()=>{sb('?id=eq.'+it.id,{method:'DELETE'}).then(loadLog).catch(()=>showErr('Smazání se nepovedlo.'));});
+    li.append(cb,txt,del);ul.appendChild(li);
+  });
+  const open=logItems.filter(i=>!i.done).length;
+  document.getElementById('logCount').textContent=logItems.length?(open+' k vypití / '+logItems.length):'0 zápisů';
+  logEmpty.textContent='Zatím nikdo. Dneska ještě všichni svatí…';
+  logEmpty.hidden=logItems.length>0;
+}
+document.getElementById('logForm').addEventListener('submit',e=>{
+  e.preventDefault();
+  const who=document.getElementById('logWho').value.trim();
+  const why=document.getElementById('logWhy').value.trim();
+  if(!who)return;
+  sb('',{method:'POST',body:{who,why}}).then(()=>{
+    document.getElementById('logWho').value='';document.getElementById('logWhy').value='';
+    document.getElementById('logWho').focus();
+    loadLog();
+  }).catch(()=>showErr('Zápis se nepovedl.'));
+});
+document.getElementById('toLogBtn').addEventListener('click',()=>{
+  if(!wPrize)return;
+  document.getElementById('logWhy').value=wPrize.t;
+  const who=document.getElementById('logWho');
+  who.scrollIntoView({behavior:'smooth',block:'center'});
+  who.focus({preventScroll:true});
+});
+document.getElementById('logClear').addEventListener('click',()=>{
+  if(logItems.length&&confirm('Opravdu smazat celý seznam trestů pro všechny?')){
+    sb('?id=gt.0',{method:'DELETE'}).then(loadLog).catch(()=>showErr('Smazání se nepovedlo.'));
+  }
+});
+loadLog();
+setInterval(loadLog,5000);
+document.addEventListener('visibilitychange',()=>{if(!document.hidden)loadLog();});
+
+newTicket();
+</script>
+</body>
+</html>
